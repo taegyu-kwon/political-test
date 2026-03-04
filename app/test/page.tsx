@@ -8,6 +8,7 @@ import { useTestStore } from "@/store/testStore";
 const LABELS = ["강하게 반대", "반대", "약간 반대", "중립", "약간 동의", "동의", "강하게 동의"];
 const VALUES = [-3, -2, -1, 0, 1, 2, 3];
 const SIZES = [52, 46, 40, 34, 40, 46, 52];
+const SIZES_MOBILE = [36, 32, 28, 24, 28, 32, 36];
 
 const PARTS: QuestionAxis[] = ["personality", "economic", "social", "media"];
 const PART_NUMBERS = ["I", "II", "III", "IV"];
@@ -17,6 +18,14 @@ export default function TestPage() {
   const { answers, setAnswer } = useTestStore();
   const [part, setPart] = useState(0);
   const [localVals, setLocalVals] = useState<Record<number, number | null>>({});
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth <= 560);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
 
   const currentAxis = PARTS[part];
   const partQuestions = questions.filter((q) => q.axis === currentAxis);
@@ -42,6 +51,8 @@ export default function TestPage() {
   const allAnswered = partQuestions.every(
     (q) => localVals[q.id] !== null && localVals[q.id] !== undefined
   );
+
+  const sizes = isMobile ? SIZES_MOBILE : SIZES;
 
   return (
     <>
@@ -207,32 +218,26 @@ export default function TestPage() {
         .circle-row {
           display: flex;
           align-items: center;
-          gap: 14px;
+          gap: 10px;
         }
 
         .end-label {
-          font-size: 15px;
+          font-size: 11px;
           font-weight: 600;
           white-space: nowrap;
-          min-width: 40px;
+          flex-shrink: 0;
         }
 
-        .end-label.left {
-          color: var(--red);
-          text-align: left;
-        }
-
-        .end-label.right {
-          color: var(--blue-mid);
-          text-align: right;
-        }
+        .end-label.left { color: var(--red); }
+        .end-label.right { color: var(--blue-mid); }
 
         .circles {
           display: flex;
           align-items: center;
           justify-content: center;
-          gap: 14px;
+          gap: 8px;
           flex: 1;
+          overflow: visible;
         }
 
         .circle-btn {
@@ -345,10 +350,11 @@ export default function TestPage() {
 
         @media (max-width: 560px) {
           .page { padding: 0 16px 60px; }
-          .circles { gap: 6px; }
-          .end-label { font-size: 10px; min-width: 28px; }
-          .question-card { padding: 20px 16px; gap: 24px; }
+          .circles { gap: 5px; }
+          .end-label { font-size: 10px; }
+          .question-card { padding: 20px 16px; gap: 20px; }
           .q-text { font-size: 15px; }
+          .circle-row { gap: 6px; }
         }
       `}</style>
 
@@ -388,7 +394,7 @@ export default function TestPage() {
 
                 <div className="circles">
                   {VALUES.map((v, i) => {
-                    const size = SIZES[i];
+                    const size = sizes[i];
                     const isSelected = val === v;
                     const selClass = isSelected
                       ? v < 0 ? "sel-neg" : v > 0 ? "sel-pos" : "sel-neu"
