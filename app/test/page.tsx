@@ -7,8 +7,7 @@ import { useTestStore } from "@/store/testStore";
 
 const LABELS = ["강하게 반대", "반대", "약간 반대", "중립", "약간 동의", "동의", "강하게 동의"];
 const VALUES = [-3, -2, -1, 0, 1, 2, 3];
-const SIZES = [52, 46, 40, 34, 40, 46, 52];
-const SIZES_MOBILE = [36, 32, 28, 24, 28, 32, 36];
+const SIZE_WEIGHTS = [1.53, 1.35, 1.18, 1, 1.18, 1.35, 1.53];
 
 const PARTS: QuestionAxis[] = ["personality", "economic", "social", "media"];
 const PART_NUMBERS = ["I", "II", "III", "IV"];
@@ -18,14 +17,6 @@ export default function TestPage() {
   const { answers, setAnswer } = useTestStore();
   const [part, setPart] = useState(0);
   const [localVals, setLocalVals] = useState<Record<number, number | null>>({});
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth <= 560);
-    check();
-    window.addEventListener("resize", check);
-    return () => window.removeEventListener("resize", check);
-  }, []);
 
   const currentAxis = PARTS[part];
   const partQuestions = questions.filter((q) => q.axis === currentAxis);
@@ -52,14 +43,14 @@ export default function TestPage() {
     (q) => localVals[q.id] !== null && localVals[q.id] !== undefined
   );
 
-  const sizes = isMobile ? SIZES_MOBILE : SIZES;
-
   return (
     <>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600;1,700&family=Inter:wght@400;500;600&display=swap');
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html, body { overflow-x: hidden; width: 100%; }
 
         :root {
           --blue: #1a3a6e;
@@ -84,6 +75,7 @@ export default function TestPage() {
           max-width: 720px;
           margin: 0 auto;
           padding: 0 32px 80px;
+          width: 100%;
         }
 
         .header {
@@ -109,7 +101,6 @@ export default function TestPage() {
         .progress-area {
           flex: 1;
           display: flex;
-          flex-direction: row;
           align-items: center;
           justify-content: flex-end;
           gap: 10px;
@@ -138,9 +129,7 @@ export default function TestPage() {
           white-space: nowrap;
         }
 
-        .part-header {
-          padding: 32px 0 24px;
-        }
+        .part-header { padding: 32px 0 24px; }
 
         .part-number {
           font-size: 11px;
@@ -160,11 +149,7 @@ export default function TestPage() {
           margin-bottom: 20px;
         }
 
-        .part-tabs {
-          display: flex;
-          gap: 6px;
-          flex-wrap: wrap;
-        }
+        .part-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
 
         .part-tab {
           font-size: 11px;
@@ -183,10 +168,7 @@ export default function TestPage() {
           background: var(--blue-light);
         }
 
-        .part-tab.done {
-          opacity: 0.35;
-          text-decoration: line-through;
-        }
+        .part-tab.done { opacity: 0.35; text-decoration: line-through; }
 
         .question-card {
           background: var(--white);
@@ -198,15 +180,12 @@ export default function TestPage() {
           flex-direction: column;
           gap: 32px;
           transition: box-shadow 0.2s, border-color 0.2s;
+          width: 100%;
+          overflow: hidden;
         }
 
-        .question-card:hover {
-          box-shadow: 0 4px 20px rgba(26,58,110,0.07);
-        }
-
-        .question-card.answered {
-          border-color: #c8d8ee;
-        }
+        .question-card:hover { box-shadow: 0 4px 20px rgba(26,58,110,0.07); }
+        .question-card.answered { border-color: #c8d8ee; }
 
         .q-text {
           font-size: 17px;
@@ -218,7 +197,8 @@ export default function TestPage() {
         .circle-row {
           display: flex;
           align-items: center;
-          gap: 10px;
+          gap: 8px;
+          width: 100%;
         }
 
         .end-label {
@@ -234,10 +214,10 @@ export default function TestPage() {
         .circles {
           display: flex;
           align-items: center;
-          justify-content: center;
-          gap: 8px;
+          justify-content: space-between;
           flex: 1;
-          overflow: visible;
+          min-width: 0;
+          gap: 4px;
         }
 
         .circle-btn {
@@ -245,54 +225,38 @@ export default function TestPage() {
           cursor: pointer;
           border: 2.5px solid var(--border);
           background: var(--white);
-          flex-shrink: 0;
-          flex-grow: 0;
           display: flex;
           align-items: center;
           justify-content: center;
           transition: border-color 0.15s ease, background 0.15s ease, transform 0.15s ease;
           outline: none;
           padding: 0;
+          flex: var(--w);
+          aspect-ratio: 1 / 1;
+          max-width: calc(var(--w) * 34px);
+          min-width: 0;
         }
 
-        .circle-btn:hover {
-          border-color: var(--ink-muted);
-          transform: scale(1.1);
-        }
-
-        .circle-btn.sel-neg {
-          border-color: var(--red);
-          background: var(--red);
-          transform: scale(1.06);
-        }
-
-        .circle-btn.sel-neu {
-          border-color: #8e8e93;
-          background: #8e8e93;
-          transform: scale(1.06);
-        }
-
-        .circle-btn.sel-pos {
-          border-color: var(--blue-mid);
-          background: var(--blue-mid);
-          transform: scale(1.06);
-        }
+        .circle-btn:hover { border-color: var(--ink-muted); transform: scale(1.08); }
+        .circle-btn.sel-neg { border-color: var(--red); background: var(--red); }
+        .circle-btn.sel-neu { border-color: #8e8e93; background: #8e8e93; }
+        .circle-btn.sel-pos { border-color: var(--blue-mid); background: var(--blue-mid); }
 
         .circle-btn svg {
           display: none;
           stroke: white;
-          stroke-width: 2;
+          stroke-width: 2.5;
           stroke-linecap: round;
           stroke-linejoin: round;
           fill: none;
           pointer-events: none;
+          width: 55%;
+          height: 55%;
         }
 
         .circle-btn.sel-neg svg,
         .circle-btn.sel-neu svg,
-        .circle-btn.sel-pos svg {
-          display: block;
-        }
+        .circle-btn.sel-pos svg { display: block; }
 
         .nav {
           display: flex;
@@ -315,11 +279,7 @@ export default function TestPage() {
           transition: all 0.15s;
         }
 
-        .btn-prev:hover:not(:disabled) {
-          border-color: var(--blue);
-          color: var(--blue);
-        }
-
+        .btn-prev:hover:not(:disabled) { border-color: var(--blue); color: var(--blue); }
         .btn-prev:disabled { opacity: 0.3; cursor: not-allowed; }
 
         .btn-next {
@@ -343,18 +303,16 @@ export default function TestPage() {
           box-shadow: 0 6px 20px rgba(26,58,110,0.2);
         }
 
-        .btn-next:disabled {
-          opacity: 0.4;
-          cursor: not-allowed;
-        }
+        .btn-next:disabled { opacity: 0.4; cursor: not-allowed; }
 
         @media (max-width: 560px) {
           .page { padding: 0 16px 60px; }
-          .circles { gap: 5px; }
-          .end-label { font-size: 10px; }
           .question-card { padding: 20px 16px; gap: 20px; }
           .q-text { font-size: 15px; }
-          .circle-row { gap: 6px; }
+          .circle-row { gap: 4px; }
+          .end-label { font-size: 10px; }
+          .circles { gap: 2px; }
+          .circle-btn { max-width: calc(var(--w) * 22px); }
         }
       `}</style>
 
@@ -388,43 +346,30 @@ export default function TestPage() {
           return (
             <div key={q.id} className={`question-card ${isAnswered ? "answered" : ""}`}>
               <p className="q-text">{q.text}</p>
-
               <div className="circle-row">
                 <span className="end-label left">반대</span>
-
                 <div className="circles">
                   {VALUES.map((v, i) => {
-                    const size = sizes[i];
+                    const w = SIZE_WEIGHTS[i];
                     const isSelected = val === v;
                     const selClass = isSelected
                       ? v < 0 ? "sel-neg" : v > 0 ? "sel-pos" : "sel-neu"
                       : "";
-                    const checkSize = Math.round(size * 0.52);
-
                     return (
                       <button
                         key={v}
                         className={`circle-btn ${selClass}`}
-                        style={{
-                          width: `${size}px`,
-                          height: `${size}px`,
-                          minWidth: `${size}px`,
-                          minHeight: `${size}px`,
-                        }}
+                        style={{ "--w": w } as React.CSSProperties}
                         onClick={() => handleChange(q.id, v)}
                         title={LABELS[i]}
                       >
-                        <svg
-                          viewBox="0 0 24 24"
-                          style={{ width: `${checkSize}px`, height: `${checkSize}px` }}
-                        >
+                        <svg viewBox="0 0 24 24">
                           <polyline points="20 6 9 17 4 12" />
                         </svg>
                       </button>
                     );
                   })}
                 </div>
-
                 <span className="end-label right">동의</span>
               </div>
             </div>
