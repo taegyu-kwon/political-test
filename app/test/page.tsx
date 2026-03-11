@@ -217,7 +217,7 @@ export default function TestPage() {
           justify-content: center;
           flex: 1;
           min-width: 0;
-          gap: 14px;
+          gap: 9px;
         }
 
         .circle-btn {
