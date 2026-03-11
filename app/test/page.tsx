@@ -214,10 +214,10 @@ export default function TestPage() {
         .circles {
           display: flex;
           align-items: center;
-          justify-content: space-between;
+          justify-content: center;
           flex: 1;
           min-width: 0;
-          gap: 4px;
+          gap: 2px;
         }
 
         .circle-btn {
