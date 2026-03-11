@@ -202,7 +202,7 @@ export default function TestPage() {
         }
 
         .end-label {
-          font-size: 11px;
+          font-size: 20px;
           font-weight: 600;
           white-space: nowrap;
           flex-shrink: 0;
