@@ -202,7 +202,7 @@ export default function TestPage() {
         }
 
         .end-label {
-          font-size: 20px;
+          font-size: 18px;
           font-weight: 600;
           white-space: nowrap;
           flex-shrink: 0;
@@ -217,7 +217,7 @@ export default function TestPage() {
           justify-content: center;
           flex: 1;
           min-width: 0;
-          gap: 2px;
+          gap: 0px;
         }
 
         .circle-btn {
