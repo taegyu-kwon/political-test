@@ -267,7 +267,7 @@ export default function Home() {
             <em>당신의 정치 성향</em>
           </h1>
           <p className={`subtitle ${mounted ? "f3" : ""}`}>
-            단순한 좌우 구분을 넘어<br className="mobile-br" /> 경제·사회·성향·정보소비 네 가지 축으로<br className="desktop-br" /> 당신의 정치적 성향을 분석합니다.
+            단순한 좌우 구분을 넘어 경제·사회·성향·정보소비 네 가지 축으로<br className="mobile-br" /> 당신의 정치적 성향을 분석합니다.
           </p>
           <div className={`cta-row ${mounted ? "f4" : ""}`}>
             <button className="btn-start" onClick={() => router.push("/intro")}>
