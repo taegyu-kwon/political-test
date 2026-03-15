@@ -17,9 +17,6 @@ function calcMainScore(answers: Record<number, number>) {
   return total / count;
 }
 
-// 한국 관례: 왼쪽=극좌(파랑), 오른쪽=극우(빨강)
-// 스펙트럼 그라디언트: 왼쪽 파랑 → 오른쪽 빨강
-// bar: 극좌=5(왼쪽), 극우=95(오른쪽)
 function getMainResult(score: number) {
   if (score >= 1.2) return { label: "극좌", en: "Far Left", desc: "국가의 강력한 개입과 급진적 평등을 지지합니다. 현 체제의 근본적 변화가 필요하다고 봅니다.", color: "#1d4ed8", bar: 5 };
   if (score >= 0.4) return { label: "진보", en: "Progressive", desc: "사회적 평등과 국가의 적극적 역할을 지지합니다. 점진적 개혁을 통한 변화를 추구합니다.", color: "#2563eb", bar: 30 };
@@ -114,6 +111,7 @@ function ResultContent() {
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600;1,700&family=Inter:wght@400;500;600&display=swap');
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
+        html, body { overflow-x: hidden; width: 100%; }
 
         :root {
           --blue: #1a3a6e;
@@ -133,90 +131,97 @@ function ResultContent() {
           min-height: 100vh;
         }
 
-        .page {
-          max-width: 720px;
-          margin: 0 auto;
-          padding: 0 32px 64px;
-        }
-
         .header {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding: 28px 0;
+          width: 100%;
+          position: sticky;
+          top: 0;
+          background: var(--paper);
+          z-index: 10;
           border-bottom: 1px solid var(--border);
-          margin-bottom: 44px;
+          padding: 20px 48px;
+          display: flex;
+          align-items: center;
         }
 
         .logo {
           font-family: 'Playfair Display', serif;
-          font-size: 18px;
+          font-size: 22px;
           font-weight: 700;
           color: var(--blue);
+          cursor: pointer;
+          transition: opacity 0.15s;
+        }
+
+        .logo:hover { opacity: 0.7; }
+
+        .page {
+          max-width: 900px;
+          margin: 0 auto;
+          padding: 48px 48px 80px;
         }
 
         .shared-banner {
           background: var(--blue-light);
           border: 1px solid #c8d8ee;
-          border-radius: 8px;
-          padding: 12px 16px;
-          font-size: 13px;
+          border-radius: 10px;
+          padding: 16px 20px;
+          font-size: 15px;
           color: var(--blue);
           font-weight: 500;
-          margin-bottom: 20px;
+          margin-bottom: 24px;
         }
 
         .main-result {
           background: var(--white);
           border: 1px solid var(--border);
-          border-radius: 12px;
-          padding: 36px 32px;
-          margin-bottom: 20px;
+          border-radius: 14px;
+          padding: 48px 44px;
+          margin-bottom: 24px;
         }
 
         .main-eyebrow {
-          font-size: 11px;
+          font-size: 14px;
           font-weight: 600;
           letter-spacing: 0.12em;
           text-transform: uppercase;
           color: var(--ink-muted);
-          margin-bottom: 14px;
+          margin-bottom: 18px;
         }
 
         .main-label {
           font-family: 'Playfair Display', serif;
-          font-size: clamp(48px, 8vw, 80px);
+          font-size: clamp(60px, 10vw, 96px);
           font-weight: 700;
           letter-spacing: -2px;
           line-height: 1;
-          margin-bottom: 6px;
+          margin-bottom: 8px;
         }
 
         .main-en {
           font-family: 'Playfair Display', serif;
-          font-size: 16px;
+          font-size: 20px;
           font-style: italic;
           color: var(--ink-muted);
-          margin-bottom: 20px;
+          margin-bottom: 28px;
         }
 
-        .spectrum-wrap { margin-bottom: 20px; }
+        .spectrum-wrap { margin-bottom: 28px; }
 
         .spectrum-label-row {
           display: flex;
           justify-content: space-between;
-          font-size: 10px;
+          font-size: 12px;
           font-weight: 600;
           letter-spacing: 0.06em;
           text-transform: uppercase;
           color: var(--ink-muted);
-          margin-bottom: 6px;
+          margin-bottom: 8px;
         }
 
         .spectrum-bar-bg {
-          height: 8px;
+          height: 10px;
           background: var(--paper);
-          border-radius: 4px;
+          border-radius: 5px;
           border: 1px solid var(--border);
           position: relative;
           overflow: visible;
@@ -225,16 +230,15 @@ function ResultContent() {
         .spectrum-track {
           position: absolute;
           top: 0; left: 0; right: 0; bottom: 0;
-          border-radius: 4px;
-          /* 왼쪽=극좌(파랑), 오른쪽=극우(빨강) */
+          border-radius: 5px;
           background: linear-gradient(to right, #1d4ed8, #9ca3af, #b91c1c);
         }
 
         .spectrum-marker {
           position: absolute;
-          top: -4px;
-          width: 16px;
-          height: 16px;
+          top: -5px;
+          width: 20px;
+          height: 20px;
           border-radius: 50%;
           background: var(--white);
           border: 3px solid var(--ink);
@@ -244,46 +248,41 @@ function ResultContent() {
         }
 
         .main-desc {
-          font-size: 14px;
+          font-size: 17px;
           color: var(--ink-muted);
           line-height: 1.75;
         }
 
         .sub-title {
           font-family: 'Playfair Display', serif;
-          font-size: 18px;
+          font-size: 22px;
           font-weight: 700;
           color: var(--ink);
-          margin-bottom: 14px;
+          margin-bottom: 18px;
           padding-top: 4px;
         }
 
         .sub-grid {
           display: grid;
           grid-template-columns: 1fr 1fr;
-          gap: 12px;
-          margin-bottom: 32px;
+          gap: 16px;
+          margin-bottom: 40px;
         }
 
         .sub-card {
           background: var(--white);
           border: 1px solid var(--border);
-          border-radius: 10px;
-          padding: 20px;
+          border-radius: 12px;
+          padding: 28px;
           display: flex;
           flex-direction: column;
-          gap: 8px;
+          gap: 10px;
         }
 
-        .sub-card-dot {
-          width: 8px;
-          height: 8px;
-          border-radius: 50%;
-          margin-bottom: 2px;
-        }
+        .sub-card-dot { width: 10px; height: 10px; border-radius: 50%; margin-bottom: 2px; }
 
         .sub-card-title {
-          font-size: 11px;
+          font-size: 13px;
           font-weight: 600;
           letter-spacing: 0.08em;
           text-transform: uppercase;
@@ -292,36 +291,28 @@ function ResultContent() {
 
         .sub-card-label {
           font-family: 'Playfair Display', serif;
-          font-size: 18px;
+          font-size: 22px;
           font-weight: 700;
           letter-spacing: -0.3px;
         }
 
-        .sub-card-desc {
-          font-size: 12px;
-          color: var(--ink-muted);
-          line-height: 1.65;
-        }
+        .sub-card-desc { font-size: 14px; color: var(--ink-muted); line-height: 1.65; }
 
-        .btn-row {
-          display: flex;
-          gap: 12px;
-          flex-wrap: wrap;
-        }
+        .btn-row { display: flex; gap: 14px; flex-wrap: wrap; }
 
         .btn-retry {
           background: var(--blue);
           border: none;
           color: var(--white);
-          padding: 14px 36px;
+          padding: 17px 44px;
           font-family: 'Inter', sans-serif;
-          font-size: 14px;
+          font-size: 16px;
           font-weight: 600;
-          border-radius: 6px;
+          border-radius: 8px;
           cursor: pointer;
           transition: all 0.18s;
           flex: 1;
-          max-width: 200px;
+          max-width: 220px;
         }
 
         .btn-retry:hover {
@@ -334,52 +325,50 @@ function ResultContent() {
           background: var(--white);
           border: 1.5px solid var(--blue);
           color: var(--blue);
-          padding: 14px 28px;
+          padding: 17px 36px;
           font-family: 'Inter', sans-serif;
-          font-size: 14px;
+          font-size: 16px;
           font-weight: 600;
-          border-radius: 6px;
+          border-radius: 8px;
           cursor: pointer;
           transition: all 0.15s;
           flex: 1;
-          max-width: 200px;
+          max-width: 220px;
         }
 
-        .btn-share:hover {
-          background: var(--blue-light);
-        }
+        .btn-share:hover { background: var(--blue-light); }
 
         .btn-home {
           background: var(--white);
           border: 1.5px solid var(--border);
           color: var(--ink-muted);
-          padding: 14px 24px;
+          padding: 17px 28px;
           font-family: 'Inter', sans-serif;
-          font-size: 13px;
+          font-size: 15px;
           font-weight: 600;
-          border-radius: 6px;
+          border-radius: 8px;
           cursor: pointer;
           transition: all 0.15s;
         }
 
-        .btn-home:hover {
-          border-color: var(--blue);
-          color: var(--blue);
-        }
+        .btn-home:hover { border-color: var(--blue); color: var(--blue); }
 
-        @media (max-width: 520px) {
+        @media (max-width: 560px) {
+          .header { padding: 16px; }
+          .logo { font-size: 17px; }
+          .page { padding: 24px 20px 56px; }
           .sub-grid { grid-template-columns: 1fr; }
-          .main-label { font-size: 56px; }
-          .page { padding: 0 20px 48px; }
+          .main-label { font-size: 64px; }
+          .main-result { padding: 32px 24px; }
           .btn-retry, .btn-share { max-width: 100%; }
         }
       `}</style>
 
-      <div className="page">
-        <header className="header">
-          <div className="logo">정치성향판별기</div>
-        </header>
+      <header className="header">
+        <div className="logo" onClick={() => router.push("/")}>정치성향판별기</div>
+      </header>
 
+      <div className="page">
         {isShared && (
           <div className="shared-banner">
             📊 친구가 공유한 정치성향 결과입니다. 나도 검사해보세요!
