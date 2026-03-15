@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useTestStore } from "@/store/testStore";
 
 const AGE_OPTIONS = ["10대", "20대", "30대", "40대", "50대", "60대 이상"];
@@ -18,7 +18,36 @@ export default function IntroPage() {
   const [gender, setGender] = useState<string | null>(null);
   const [region, setRegion] = useState<string | null>(null);
 
+  const genderRef = useRef<HTMLDivElement | null>(null);
+  const regionRef = useRef<HTMLDivElement | null>(null);
+  const btnRef = useRef<HTMLDivElement | null>(null);
+
   const canProceed = age !== null && gender !== null && region !== null;
+
+  const handleAgeSelect = (a: string) => {
+    setAge(a);
+    if (!gender) {
+      setTimeout(() => {
+        genderRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+      }, 120);
+    }
+  };
+
+  const handleGenderSelect = (g: string) => {
+    setGender(g);
+    if (!region) {
+      setTimeout(() => {
+        regionRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+      }, 120);
+    }
+  };
+
+  const handleRegionSelect = (r: string) => {
+    setRegion(r);
+    setTimeout(() => {
+      btnRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+    }, 120);
+  };
 
   const handleStart = () => {
     setDemo({ age, gender, region });
@@ -31,6 +60,7 @@ export default function IntroPage() {
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600;1,700&family=Inter:wght@400;500;600&display=swap');
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
+        html, body { overflow-x: hidden; width: 100%; }
 
         :root {
           --blue: #1a3a6e;
@@ -50,86 +80,85 @@ export default function IntroPage() {
           min-height: 100vh;
         }
 
-        .page {
-          max-width: 720px;
-          margin: 0 auto;
-          padding: 0 32px 80px;
-        }
-
         .header {
-          padding: 28px 0;
+          width: 100%;
+          position: sticky;
+          top: 0;
+          background: var(--paper);
+          z-index: 10;
           border-bottom: 1px solid var(--border);
-          margin-bottom: 44px;
+          padding: 20px 48px;
+          display: flex;
+          align-items: center;
         }
 
         .logo {
           font-family: 'Playfair Display', serif;
-          font-size: 18px;
+          font-size: 22px;
           font-weight: 700;
           color: var(--blue);
+          cursor: pointer;
+          transition: opacity 0.15s;
         }
 
-        .intro-header {
-          margin-bottom: 36px;
+        .logo:hover { opacity: 0.7; }
+
+        .page {
+          max-width: 900px;
+          margin: 0 auto;
+          padding: 48px 48px 100px;
         }
+
+        .intro-header { margin-bottom: 48px; }
 
         .eyebrow {
-          font-size: 11px;
+          font-size: 14px;
           font-weight: 600;
           letter-spacing: 0.12em;
           text-transform: uppercase;
           color: var(--ink-muted);
-          margin-bottom: 10px;
+          margin-bottom: 14px;
         }
 
         .title {
           font-family: 'Playfair Display', serif;
-          font-size: 26px;
+          font-size: 36px;
           font-weight: 700;
           color: var(--blue);
           font-style: italic;
-          margin-bottom: 12px;
+          margin-bottom: 16px;
           line-height: 1.3;
         }
 
         .subtitle {
-          font-size: 14px;
+          font-size: 17px;
           color: var(--ink-muted);
           line-height: 1.7;
         }
 
-        .section {
-          margin-bottom: 32px;
-        }
+        .section { margin-bottom: 40px; }
 
         .section-label {
-          font-size: 13px;
+          font-size: 16px;
           font-weight: 600;
           color: var(--ink);
-          margin-bottom: 12px;
+          margin-bottom: 16px;
           display: flex;
           align-items: center;
-          gap: 6px;
-        }
-
-        .section-label .required {
-          color: #dc2626;
-          font-size: 11px;
-        }
-
-        .chip-group {
-          display: flex;
-          flex-wrap: wrap;
           gap: 8px;
         }
 
+        .section-label .required { color: #dc2626; font-size: 13px; }
+
+        .chip-group { display: flex; flex-wrap: wrap; gap: 10px; }
+
         .chip {
-          padding: 8px 18px;
-          border-radius: 24px;
+          padding: 11px 24px;
+          border-radius: 28px;
           border: 1.5px solid var(--border);
           background: var(--white);
           font-family: 'Inter', sans-serif;
-          font-size: 13px;
+          font-size: 15px;
           font-weight: 500;
           color: var(--ink-muted);
           cursor: pointer;
@@ -137,30 +166,22 @@ export default function IntroPage() {
           outline: none;
         }
 
-        .chip:hover {
-          border-color: var(--blue);
-          color: var(--blue);
-        }
-
-        .chip.selected {
-          border-color: var(--blue);
-          background: var(--blue);
-          color: var(--white);
-        }
+        .chip:hover { border-color: var(--blue); color: var(--blue); }
+        .chip.selected { border-color: var(--blue); background: var(--blue); color: var(--white); }
 
         .region-grid {
           display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-          gap: 8px;
+          grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+          gap: 10px;
         }
 
         .region-chip {
-          padding: 8px 4px;
-          border-radius: 8px;
+          padding: 11px 4px;
+          border-radius: 10px;
           border: 1.5px solid var(--border);
           background: var(--white);
           font-family: 'Inter', sans-serif;
-          font-size: 13px;
+          font-size: 15px;
           font-weight: 500;
           color: var(--ink-muted);
           cursor: pointer;
@@ -169,45 +190,33 @@ export default function IntroPage() {
           text-align: center;
         }
 
-        .region-chip:hover {
-          border-color: var(--blue);
-          color: var(--blue);
-        }
+        .region-chip:hover { border-color: var(--blue); color: var(--blue); }
+        .region-chip.selected { border-color: var(--blue); background: var(--blue); color: var(--white); }
 
-        .region-chip.selected {
-          border-color: var(--blue);
-          background: var(--blue);
-          color: var(--white);
-        }
-
-        .divider {
-          height: 1px;
-          background: var(--border);
-          margin: 32px 0;
-        }
+        .divider { height: 1px; background: var(--border); margin: 40px 0; }
 
         .privacy-note {
-          font-size: 12px;
+          font-size: 14px;
           color: var(--ink-muted);
           line-height: 1.65;
-          padding: 14px 16px;
+          padding: 18px 20px;
           background: var(--white);
           border: 1px solid var(--border);
-          border-radius: 8px;
-          margin-bottom: 24px;
+          border-radius: 10px;
+          margin-bottom: 28px;
         }
 
         .btn-start {
           width: 100%;
-          max-width: 320px;
+          max-width: 360px;
           background: var(--blue);
           border: none;
           color: var(--white);
-          padding: 15px 40px;
+          padding: 18px 40px;
           font-family: 'Inter', sans-serif;
-          font-size: 15px;
+          font-size: 17px;
           font-weight: 600;
-          border-radius: 6px;
+          border-radius: 8px;
           cursor: pointer;
           transition: all 0.18s;
           display: block;
@@ -219,23 +228,26 @@ export default function IntroPage() {
           box-shadow: 0 6px 20px rgba(26,58,110,0.2);
         }
 
-        .btn-start:disabled {
-          opacity: 0.35;
-          cursor: not-allowed;
-        }
+        .btn-start:disabled { opacity: 0.35; cursor: not-allowed; }
 
         @media (max-width: 560px) {
-          .page { padding: 0 16px 60px; }
-          .title { font-size: 22px; }
-          .region-grid { grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)); }
+          .header { padding: 16px; }
+          .logo { font-size: 17px; }
+          .page { padding: 24px 20px 60px; }
+          .title { font-size: 26px; }
+          .subtitle { font-size: 14px; }
+          .chip { font-size: 13px; padding: 9px 18px; }
+          .region-chip { font-size: 13px; }
+          .region-grid { grid-template-columns: repeat(auto-fill, minmax(76px, 1fr)); }
+          .btn-start { font-size: 15px; padding: 15px 32px; }
         }
       `}</style>
 
-      <div className="page">
-        <header className="header">
-          <div className="logo">정치성향판별기</div>
-        </header>
+      <header className="header">
+        <div className="logo" onClick={() => router.push("/")}>정치성향판별기</div>
+      </header>
 
+      <div className="page">
         <div className="intro-header">
           <p className="eyebrow">시작 전 기본 정보</p>
           <h1 className="title">검사를 시작하기 전에<br />간단한 정보를 입력해주세요</h1>
@@ -249,43 +261,25 @@ export default function IntroPage() {
           <p className="section-label">연령대 <span className="required">필수</span></p>
           <div className="chip-group">
             {AGE_OPTIONS.map((a) => (
-              <button
-                key={a}
-                className={`chip ${age === a ? "selected" : ""}`}
-                onClick={() => setAge(a)}
-              >
-                {a}
-              </button>
+              <button key={a} className={`chip ${age === a ? "selected" : ""}`} onClick={() => handleAgeSelect(a)}>{a}</button>
             ))}
           </div>
         </div>
 
-        <div className="section">
+        <div className="section" ref={genderRef}>
           <p className="section-label">성별 <span className="required">필수</span></p>
           <div className="chip-group">
             {GENDER_OPTIONS.map((g) => (
-              <button
-                key={g}
-                className={`chip ${gender === g ? "selected" : ""}`}
-                onClick={() => setGender(g)}
-              >
-                {g}
-              </button>
+              <button key={g} className={`chip ${gender === g ? "selected" : ""}`} onClick={() => handleGenderSelect(g)}>{g}</button>
             ))}
           </div>
         </div>
 
-        <div className="section">
+        <div className="section" ref={regionRef}>
           <p className="section-label">거주 지역 <span className="required">필수</span></p>
           <div className="region-grid">
             {REGION_OPTIONS.map((r) => (
-              <button
-                key={r}
-                className={`region-chip ${region === r ? "selected" : ""}`}
-                onClick={() => setRegion(r)}
-              >
-                {r}
-              </button>
+              <button key={r} className={`region-chip ${region === r ? "selected" : ""}`} onClick={() => handleRegionSelect(r)}>{r}</button>
             ))}
           </div>
         </div>
@@ -297,9 +291,11 @@ export default function IntroPage() {
           개인을 식별할 수 있는 정보는 수집하지 않습니다.
         </p>
 
-        <button className="btn-start" onClick={handleStart} disabled={!canProceed}>
-          검사 시작하기
-        </button>
+        <div ref={btnRef}>
+          <button className="btn-start" onClick={handleStart} disabled={!canProceed}>
+            검사 시작하기
+          </button>
+        </div>
       </div>
     </>
   );
