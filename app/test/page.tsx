@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { questions, partLabels, QuestionAxis } from "@/data/questions";
 import { useTestStore } from "@/store/testStore";
 
@@ -17,6 +17,7 @@ export default function TestPage() {
   const { answers, setAnswer } = useTestStore();
   const [part, setPart] = useState(0);
   const [localVals, setLocalVals] = useState<Record<number, number | null>>({});
+  const rowRefs = useRef<Record<number, HTMLDivElement | null>>({});
 
   const currentAxis = PARTS[part];
   const partQuestions = questions.filter((q) => q.axis === currentAxis);
@@ -34,6 +35,20 @@ export default function TestPage() {
   const handleChange = (id: number, val: number) => {
     setLocalVals((prev) => ({ ...prev, [id]: val }));
     setAnswer(id, val);
+
+    const currentIdx = partQuestions.findIndex((q) => q.id === id);
+    const nextUnanswered = partQuestions.slice(currentIdx + 1).find(
+      (q) => localVals[q.id] === null || localVals[q.id] === undefined
+    );
+
+    if (nextUnanswered && rowRefs.current[nextUnanswered.id]) {
+      setTimeout(() => {
+        rowRefs.current[nextUnanswered.id]?.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+        });
+      }, 120);
+    }
   };
 
   const totalAnswered = Object.keys(answers).length;
@@ -49,7 +64,6 @@ export default function TestPage() {
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600;1,700&family=Inter:wght@400;500;600&display=swap');
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
-
         html, body { overflow-x: hidden; width: 100%; }
 
         :root {
@@ -72,89 +86,69 @@ export default function TestPage() {
         }
 
         .page {
-          max-width: 720px;
+          max-width: 1080px;
           margin: 0 auto;
-          padding: 0 32px 80px;
+          padding: 0 48px 80px;
           width: 100%;
         }
 
         .header {
+          width: 100%;
           position: sticky;
           top: 0;
           background: var(--paper);
           z-index: 10;
           border-bottom: 1px solid var(--border);
-          padding: 16px 0;
+          padding: 20px 48px;
           display: flex;
           align-items: center;
-          gap: 24px;
         }
 
         .logo {
           font-family: 'Playfair Display', serif;
-          font-size: 15px;
+          font-size: 22px;
           font-weight: 700;
           color: var(--blue);
           white-space: nowrap;
+          cursor: pointer;
+          transition: opacity 0.15s;
         }
 
-        .progress-area {
-          flex: 1;
-          display: flex;
-          align-items: center;
-          justify-content: flex-end;
-          gap: 10px;
-        }
+        .logo:hover { opacity: 0.7; }
 
-        .progress-bar-bg {
-          width: 80px;
-          height: 3px;
-          background: var(--border);
-          border-radius: 2px;
-          overflow: hidden;
-          flex-shrink: 0;
-        }
-
-        .progress-bar-fill {
-          height: 3px;
-          background: var(--blue);
-          border-radius: 2px;
-          transition: width 0.5s ease;
-        }
-
-        .progress-text {
-          font-size: 11px;
-          color: var(--ink-muted);
-          font-weight: 500;
-          white-space: nowrap;
-        }
-
-        .part-header { padding: 32px 0 24px; }
+        .part-header { padding: 24px 0 16px; }
 
         .part-number {
-          font-size: 11px;
+          font-size: 14px;
           font-weight: 600;
           letter-spacing: 0.12em;
           text-transform: uppercase;
           color: var(--ink-muted);
-          margin-bottom: 6px;
+          margin-bottom: 4px;
         }
 
         .part-title {
           font-family: 'Playfair Display', serif;
-          font-size: 22px;
+          font-size: 32px;
           font-weight: 700;
           color: var(--blue);
           font-style: italic;
           margin-bottom: 20px;
         }
 
+        .part-bottom-row {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 16px;
+        }
+
         .part-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
 
         .part-tab {
-          font-size: 11px;
+          font-size: 13px;
           font-weight: 600;
-          padding: 5px 12px;
+          padding: 6px 16px;
           border-radius: 20px;
           border: 1.5px solid var(--border);
           color: var(--ink-muted);
@@ -170,31 +164,53 @@ export default function TestPage() {
 
         .part-tab.done { opacity: 0.35; text-decoration: line-through; }
 
-        .question-card {
-          background: var(--white);
-          border: 1px solid var(--border);
-          border-radius: 12px;
-          padding: 32px 40px;
-          margin-bottom: 12px;
+        .progress-area {
           display: flex;
-          flex-direction: column;
-          gap: 32px;
-          transition: box-shadow 0.2s, border-color 0.2s;
-          width: 100%;
+          align-items: center;
+          gap: 10px;
+          flex-shrink: 0;
+        }
+
+        .progress-bar-bg {
+          width: 200px;
+          height: 6px;
+          background: var(--border);
+          border-radius: 4px;
           overflow: hidden;
         }
 
-        .question-card:hover { box-shadow: 0 4px 20px rgba(26,58,110,0.07); }
-        .question-card.answered { border-color: #c8d8ee; }
+        .progress-bar-fill {
+          height: 6px;
+          background: var(--blue);
+          border-radius: 4px;
+          transition: width 0.5s ease;
+        }
+
+        .progress-text {
+          font-size: 13px;
+          color: var(--ink-muted);
+          font-weight: 500;
+          white-space: nowrap;
+        }
+
+        .question-row {
+          display: flex;
+          flex-direction: column;
+          gap: 20px;
+          padding: 36px 0;
+          border-bottom: 1px solid var(--border);
+        }
+
+        .question-row:first-of-type { border-top: 1px solid var(--border); }
 
         .q-text {
-          font-size: 17px;
+          font-size: 22px;
           font-weight: 500;
-          line-height: 1.65;
+          line-height: 1.6;
           color: var(--ink);
         }
 
-        .circle-row {
+        .scale-row {
           display: flex;
           align-items: center;
           gap: 8px;
@@ -202,22 +218,23 @@ export default function TestPage() {
         }
 
         .end-label {
-          font-size: 18px;
-          font-weight: 600;
+          font-size: 20px;
+          font-weight: 700;
           white-space: nowrap;
           flex-shrink: 0;
+          min-width: 32px;
         }
 
-        .end-label.left { color: var(--red); }
-        .end-label.right { color: var(--blue-mid); }
+        .end-label.left { color: var(--red); text-align: right; }
+        .end-label.right { color: var(--blue-mid); text-align: left; }
 
         .circles {
           display: flex;
           align-items: center;
-          justify-content: center;
+          justify-content: space-between;
           flex: 1;
-          min-width: 0;
-          gap: 22px;
+          gap: 0;
+          padding: 0 90px;
         }
 
         .circle-btn {
@@ -228,12 +245,12 @@ export default function TestPage() {
           display: flex;
           align-items: center;
           justify-content: center;
-          transition: border-color 0.15s ease, background 0.15s ease, transform 0.15s ease;
+          transition: border-color 0.15s, background 0.15s, transform 0.15s;
           outline: none;
           padding: 0;
           flex: var(--w);
           aspect-ratio: 1 / 1;
-          max-width: calc(var(--w) * 34px);
+          max-width: calc(var(--w) * 46px);
           min-width: 0;
         }
 
@@ -306,47 +323,59 @@ export default function TestPage() {
         .btn-next:disabled { opacity: 0.4; cursor: not-allowed; }
 
         @media (max-width: 560px) {
+          .header { padding: 16px; }
+          .logo { font-size: 17px; }
           .page { padding: 0 16px 60px; }
-          .question-card { padding: 20px 16px; gap: 20px; }
-          .q-text { font-size: 15px; }
-          .circle-row { gap: 4px; }
-          .end-label { font-size: 10px; }
-          .circles { gap: 2px; }
-          .circle-btn { max-width: calc(var(--w) * 22px); }
+          .part-title { font-size: 24px; }
+          .part-bottom-row { flex-direction: column; align-items: flex-start; gap: 10px; }
+          .progress-bar-bg { width: 140px; }
+          .question-row { gap: 14px; padding: 24px 0; }
+          .q-text { font-size: 16px; }
+          .end-label { font-size: 13px; min-width: 24px; }
+          .scale-row { gap: 6px; }
+          .circles { padding: 0; }
+          .circle-btn { max-width: calc(var(--w) * 28px); }
         }
       `}</style>
 
-      <div className="page">
-        <header className="header">
-          <div className="logo">정치성향판별기</div>
-          <div className="progress-area">
-            <div className="progress-bar-bg">
-              <div className="progress-bar-fill" style={{ width: `${progress}%` }} />
-            </div>
-            <p className="progress-text">{Math.min(totalAnswered, questions.length)} / {questions.length} 완료</p>
-          </div>
-        </header>
+      <header className="header">
+        <div className="logo" onClick={() => router.push("/")}>
+          정치성향판별기
+        </div>
+      </header>
 
+      <div className="page">
         <div className="part-header">
           <p className="part-number">Part {PART_NUMBERS[part]} · {part + 1} / {PARTS.length}</p>
           <h2 className="part-title">{partLabels[currentAxis]}</h2>
-          <div className="part-tabs">
-            {PARTS.map((p, i) => (
-              <span key={p} className={`part-tab ${i === part ? "active" : i < part ? "done" : ""}`}>
-                {PART_NUMBERS[i]}. {partLabels[p]}
-              </span>
-            ))}
+          <div className="part-bottom-row">
+            <div className="part-tabs">
+              {PARTS.map((p, i) => (
+                <span key={p} className={`part-tab ${i === part ? "active" : i < part ? "done" : ""}`}>
+                  {PART_NUMBERS[i]}. {partLabels[p]}
+                </span>
+              ))}
+            </div>
+            <div className="progress-area">
+              <div className="progress-bar-bg">
+                <div className="progress-bar-fill" style={{ width: `${progress}%` }} />
+              </div>
+              <p className="progress-text">{Math.min(totalAnswered, questions.length)} / {questions.length} 완료</p>
+            </div>
           </div>
         </div>
 
         {partQuestions.map((q) => {
           const val = localVals[q.id];
-          const isAnswered = answers[q.id] !== undefined;
 
           return (
-            <div key={q.id} className={`question-card ${isAnswered ? "answered" : ""}`}>
+            <div
+              key={q.id}
+              className="question-row"
+              ref={(el) => { rowRefs.current[q.id] = el; }}
+            >
               <p className="q-text">{q.text}</p>
-              <div className="circle-row">
+              <div className="scale-row">
                 <span className="end-label left">반대</span>
                 <div className="circles">
                   {VALUES.map((v, i) => {
