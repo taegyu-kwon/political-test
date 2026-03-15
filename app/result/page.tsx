@@ -1,9 +1,10 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { Suspense } from "react";
+import { Suspense, useEffect, useRef } from "react";
 import { questions } from "@/data/questions";
 import { useTestStore } from "@/store/testStore";
+import { supabase } from "@/lib/supabase";
 
 function calcMainScore(answers: Record<number, number>) {
   let total = 0;
@@ -64,7 +65,8 @@ const LABEL_MAP: Record<string, ReturnType<typeof getMainResult>> = {
 function ResultContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { answers, reset } = useTestStore();
+  const { answers, demo, reset } = useTestStore();
+  const savedRef = useRef(false);
 
   const sharedLabel = searchParams.get("label");
   const sharedP1 = searchParams.get("p1");
@@ -90,6 +92,19 @@ function ResultContent() {
     { title: "확증편향 지수", ...sub.confirmBias },
     { title: "판단 방식", ...sub.judgment },
   ];
+
+  // 결과 페이지 진입 시 한 번만 저장
+  useEffect(() => {
+    if (isShared || savedRef.current) return;
+    savedRef.current = true;
+
+    supabase.from("responses").insert({
+      age: demo?.age ?? null,
+      gender: demo?.gender ?? null,
+      region: demo?.region ?? null,
+      result: main.label,
+    });
+  }, []);
 
   const handleShare = () => {
     const s = calcSubResults(answers);
@@ -360,7 +375,6 @@ function ResultContent() {
           .sub-grid { grid-template-columns: 1fr; }
           .main-label { font-size: 64px; }
           .main-result { padding: 32px 24px; }
-          .btn-retry, .btn-share { max-width: 100%; }
           .btn-row { flex-wrap: nowrap; gap: 8px; }
           .btn-retry { max-width: 100%; font-size: 13px; padding: 12px 14px; }
           .btn-share { max-width: 100%; font-size: 13px; padding: 12px 14px; }
