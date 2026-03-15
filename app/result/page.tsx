@@ -360,7 +360,10 @@ function ResultContent() {
           .sub-grid { grid-template-columns: 1fr; }
           .main-label { font-size: 64px; }
           .main-result { padding: 32px 24px; }
-          .btn-retry, .btn-share { max-width: 100%; }
+          .btn-row { flex-wrap: nowrap; gap: 8px; }
+          .btn-retry { max-width: 100%; font-size: 13px; padding: 12px 14px; }
+          .btn-share { max-width: 100%; font-size: 13px; padding: 12px 14px; }
+          .btn-home { font-size: 13px; padding: 12px 14px; }
         }
       `}</style>
 
