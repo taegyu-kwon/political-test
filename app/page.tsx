@@ -106,9 +106,7 @@ export default function Home() {
           line-height: 1.8;
         }
 
-        /* PC: 보임 / 모바일: 숨김 */
         .desktop-br { display: block; }
-        /* 모바일: 보임 / PC: 숨김 */
         .mobile-br { display: none; }
 
         .cta-row {
@@ -239,7 +237,7 @@ export default function Home() {
         .f5 { animation: fadeUp 0.55s ease both 0.45s; }
         .f6 { animation: fadeUp 0.55s ease both 0.55s; }
 
-        @media (max-width: 560px) {
+        @media (max-width: 768px) {
           .header { padding: 16px; }
           .logo { font-size: 17px; }
           .page { padding: 0 20px; }
