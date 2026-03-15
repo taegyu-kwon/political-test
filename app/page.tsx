@@ -14,6 +14,7 @@ export default function Home() {
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600;1,700&family=Inter:wght@400;500;600&display=swap');
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
+        html, body { overflow-x: hidden; width: 100%; }
 
         :root {
           --blue: #1a3a6e;
@@ -33,41 +34,38 @@ export default function Home() {
           min-height: 100vh;
         }
 
-        .page {
-          min-height: 100vh;
-          display: flex;
-          flex-direction: column;
-          max-width: 760px;
-          margin: 0 auto;
-          padding: 0 32px;
-        }
-
         .header {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding: 28px 0;
+          width: 100%;
+          position: sticky;
+          top: 0;
+          background: var(--paper);
+          z-index: 10;
           border-bottom: 1px solid var(--border);
+          padding: 20px 48px;
+          display: flex;
+          align-items: center;
         }
 
         .logo {
           font-family: 'Playfair Display', serif;
-          font-size: 18px;
+          font-size: 22px;
           font-weight: 700;
           color: var(--blue);
           letter-spacing: -0.2px;
+          white-space: nowrap;
+          cursor: pointer;
+          transition: opacity 0.15s;
         }
 
-        .logo-dot { color: var(--blue-mid); }
+        .logo:hover { opacity: 0.7; }
 
-        .header-tag {
-          font-size: 12px;
-          font-weight: 500;
-          color: var(--ink-muted);
-          border: 1px solid var(--border);
-          padding: 4px 14px;
-          border-radius: 20px;
-          background: var(--white);
+        .page {
+          min-height: calc(100vh - 65px);
+          display: flex;
+          flex-direction: column;
+          max-width: 980px;
+          margin: 0 auto;
+          padding: 0 48px;
         }
 
         .hero {
@@ -75,12 +73,12 @@ export default function Home() {
           display: flex;
           flex-direction: column;
           justify-content: center;
-          padding: 80px 0 56px;
-          gap: 24px;
+          padding: 96px 0 64px;
+          gap: 28px;
         }
 
         .eyebrow {
-          font-size: 11px;
+          font-size: 14px;
           font-weight: 600;
           letter-spacing: 0.14em;
           text-transform: uppercase;
@@ -89,7 +87,7 @@ export default function Home() {
 
         .title {
           font-family: 'Playfair Display', serif;
-          font-size: clamp(44px, 7vw, 76px);
+          font-size: clamp(52px, 7vw, 88px);
           font-weight: 700;
           letter-spacing: -1px;
           line-height: 1.1;
@@ -102,17 +100,17 @@ export default function Home() {
         }
 
         .subtitle {
-          font-size: 16px;
+          font-size: 19px;
           font-weight: 400;
           color: var(--ink-muted);
           line-height: 1.8;
-          max-width: 480px;
+          max-width: 580px;
         }
 
         .cta-row {
           display: flex;
           align-items: center;
-          gap: 20px;
+          gap: 24px;
           flex-wrap: wrap;
           padding-top: 8px;
         }
@@ -121,11 +119,11 @@ export default function Home() {
           background: var(--blue);
           color: var(--white);
           border: none;
-          padding: 14px 36px;
+          padding: 17px 44px;
           font-family: 'Inter', sans-serif;
-          font-size: 14px;
+          font-size: 17px;
           font-weight: 600;
-          border-radius: 6px;
+          border-radius: 8px;
           cursor: pointer;
           transition: all 0.18s;
         }
@@ -137,7 +135,7 @@ export default function Home() {
         }
 
         .cta-meta {
-          font-size: 13px;
+          font-size: 15px;
           color: var(--ink-muted);
           font-weight: 400;
         }
@@ -147,13 +145,13 @@ export default function Home() {
           grid-template-columns: repeat(4, 1fr);
           background: var(--white);
           border: 1px solid var(--border);
-          border-radius: 10px;
+          border-radius: 12px;
           overflow: hidden;
-          margin-bottom: 24px;
+          margin-bottom: 28px;
         }
 
         .stat {
-          padding: 22px 20px;
+          padding: 28px 24px;
           border-right: 1px solid var(--border);
         }
 
@@ -161,7 +159,7 @@ export default function Home() {
 
         .stat-num {
           font-family: 'Playfair Display', serif;
-          font-size: 30px;
+          font-size: 38px;
           font-weight: 700;
           color: var(--blue);
           line-height: 1;
@@ -169,64 +167,58 @@ export default function Home() {
         }
 
         .stat-label {
-          font-size: 11px;
+          font-size: 14px;
           font-weight: 500;
           color: var(--ink-muted);
-          margin-top: 5px;
+          margin-top: 7px;
           line-height: 1.4;
         }
 
         .parts-card {
           background: var(--white);
           border: 1px solid var(--border);
-          border-radius: 10px;
-          padding: 24px 28px;
-          margin-bottom: 48px;
+          border-radius: 12px;
+          padding: 30px 36px;
+          margin-bottom: 56px;
           display: flex;
           flex-direction: column;
-          gap: 14px;
+          gap: 18px;
         }
 
         .parts-label {
-          font-size: 11px;
+          font-size: 13px;
           font-weight: 600;
           letter-spacing: 0.1em;
           text-transform: uppercase;
           color: var(--ink-muted);
-          padding-bottom: 12px;
+          padding-bottom: 16px;
           border-bottom: 1px solid var(--border);
         }
 
         .part-row {
           display: flex;
           align-items: center;
-          gap: 12px;
+          gap: 16px;
         }
 
         .part-num {
           font-family: 'Playfair Display', serif;
-          font-size: 13px;
+          font-size: 16px;
           font-weight: 700;
           color: var(--blue);
-          min-width: 20px;
+          min-width: 24px;
         }
 
         .part-name {
-          font-size: 14px;
+          font-size: 17px;
           font-weight: 500;
           color: var(--ink);
         }
 
-        .part-desc {
-          font-size: 12px;
-          color: var(--ink-muted);
-          margin-left: auto;
-        }
-
         .footer {
-          padding: 20px 0;
+          padding: 24px 0;
           border-top: 1px solid var(--border);
-          font-size: 12px;
+          font-size: 14px;
           color: var(--ink-muted);
           display: flex;
           justify-content: space-between;
@@ -242,13 +234,28 @@ export default function Home() {
         .f4 { animation: fadeUp 0.55s ease both 0.35s; }
         .f5 { animation: fadeUp 0.55s ease both 0.45s; }
         .f6 { animation: fadeUp 0.55s ease both 0.55s; }
+
+        @media (max-width: 560px) {
+          .header { padding: 16px; }
+          .logo { font-size: 17px; }
+          .page { padding: 0 20px; }
+          .subtitle { font-size: 15px; }
+          .btn-start { font-size: 15px; padding: 14px 32px; }
+          .stat-num { font-size: 28px; }
+          .stat-label { font-size: 12px; }
+          .part-name { font-size: 15px; }
+          .stats { grid-template-columns: repeat(2, 1fr); }
+          .stat:nth-child(2) { border-right: none; }
+          .stat:nth-child(3) { border-top: 1px solid var(--border); }
+          .stat:nth-child(4) { border-top: 1px solid var(--border); }
+        }
       `}</style>
 
-      <div className="page">
-        <header className="header">
-          <div className="logo">정치성향판별기</div>
-        </header>
+      <header className="header">
+        <div className="logo">정치성향판별기</div>
+      </header>
 
+      <div className="page">
         <main className="hero">
           <p className={`eyebrow ${mounted ? "f1" : ""}`}>가치관으로 읽는 나의 정치 성향</p>
           <h1 className={`title ${mounted ? "f2" : ""}`}>
@@ -309,7 +316,7 @@ export default function Home() {
         </div>
 
         <footer className="footer">
-          <span>© 2025 정치성향판별기</span>
+          <span>© 2026 정치성향판별기</span>
           <span>더 나은 정치 문화를 함께 만들어갑니다.</span>
         </footer>
       </div>
