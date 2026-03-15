@@ -106,8 +106,10 @@ export default function Home() {
           line-height: 1.8;
         }
 
-        .desktop-br { display: block; }
-        .mobile-br { display: none; }
+        /* PC에서는 보임, 모바일에서는 숨김 */
+        .pc-br { display: block; }
+        /* 모바일에서는 보임, PC에서는 숨김 */
+        .mo-br { display: none; }
 
         .cta-row {
           display: flex;
@@ -242,8 +244,8 @@ export default function Home() {
           .logo { font-size: 17px; }
           .page { padding: 0 20px; }
           .subtitle { font-size: 15px; }
-          .desktop-br { display: none; }
-          .mobile-br { display: block; }
+          .pc-br { display: none; }
+          .mo-br { display: block; }
           .btn-start { font-size: 15px; padding: 14px 32px; }
           .stat-num { font-size: 28px; }
           .stat-label { font-size: 12px; }
@@ -267,7 +269,7 @@ export default function Home() {
             <em>당신의 정치 성향</em>
           </h1>
           <p className={`subtitle ${mounted ? "f3" : ""}`}>
-            단순한 좌우 구분을 넘어 경제·사회·성향·정보소비 네 가지 축으로<br className="mobile-br" /> 당신의 정치적 성향을 분석합니다.
+            단순한 좌우 구분을 넘어<br className="mo-br" /> 경제·사회·성향·정보소비 네 가지 축으로<br className="pc-br mo-br" /> 당신의 정치적 성향을 분석합니다.
           </p>
           <div className={`cta-row ${mounted ? "f4" : ""}`}>
             <button className="btn-start" onClick={() => router.push("/intro")}>
