@@ -107,6 +107,8 @@ export default function Home() {
           max-width: 580px;
         }
 
+        .mobile-br { display: none; }
+
         .cta-row {
           display: flex;
           align-items: center;
@@ -240,6 +242,7 @@ export default function Home() {
           .logo { font-size: 17px; }
           .page { padding: 0 20px; }
           .subtitle { font-size: 15px; }
+          .mobile-br { display: block; }
           .btn-start { font-size: 15px; padding: 14px 32px; }
           .stat-num { font-size: 28px; }
           .stat-label { font-size: 12px; }
@@ -263,7 +266,7 @@ export default function Home() {
             <em>당신의 정치 성향</em>
           </h1>
           <p className={`subtitle ${mounted ? "f3" : ""}`}>
-            단순한 좌우 구분을 넘어 경제·사회·성향·정보소비 네 가지 축으로 당신의 정치적 성향을 분석합니다.
+            단순한 좌우 구분을 넘어<span className="mobile-br" /> 경제·사회·성향·정보소비 네 가지 축으로<span className="mobile-br" /> 당신의 정치적 성향을 분석합니다.
           </p>
           <div className={`cta-row ${mounted ? "f4" : ""}`}>
             <button className="btn-start" onClick={() => router.push("/intro")}>
