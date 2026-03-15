@@ -254,6 +254,7 @@ export default function Home() {
           .stat:nth-child(2) { border-right: none; }
           .stat:nth-child(3) { border-top: 1px solid var(--border); }
           .stat:nth-child(4) { border-top: 1px solid var(--border); }
+          .footer { padding: 40px 0; flex-direction: column; gap: 8px; }
         }
       `}</style>
 
