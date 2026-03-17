@@ -103,6 +103,9 @@ function ResultContent() {
       gender: demo?.gender ?? null,
       region: demo?.region ?? null,
       result: main.label,
+    }).then(({ error }) => {
+      if (error) console.error("Supabase insert error:", error);
+      else console.log("Insert 성공!");
     });
   }, []);
 
