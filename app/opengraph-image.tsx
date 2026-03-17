@@ -6,16 +6,6 @@ export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
 export default async function Image() {
-  const playfairRes = await fetch(
-    "https://fonts.gstatic.com/s/playfairdisplay/v37/nuFvD-vYSZviVYUb_rj3ij__anPXJzDwcbmjWBN2PKdFvXDXbtM.woff2"
-  );
-  const playfairData = await playfairRes.arrayBuffer();
-
-  const playfairItalicRes = await fetch(
-    "https://fonts.gstatic.com/s/playfairdisplay/v37/nuFRD-vYSZviVYUb_rj3ij__anPXDTzYh0c7AAFe.woff2"
-  );
-  const playfairItalicData = await playfairItalicRes.arrayBuffer();
-
   return new ImageResponse(
     (
       <div
@@ -39,7 +29,6 @@ export default async function Image() {
             textTransform: "uppercase",
             marginBottom: 28,
             display: "flex",
-            fontFamily: "sans-serif",
           }}
         >
           가치관으로 읽는 나의 정치 성향
@@ -53,7 +42,7 @@ export default async function Image() {
               color: "#1c1c1e",
               lineHeight: 1.1,
               letterSpacing: "-1px",
-              fontFamily: "Playfair Display",
+              fontFamily: "serif",
               display: "flex",
             }}
           >
@@ -66,7 +55,7 @@ export default async function Image() {
               color: "#1a3a6e",
               lineHeight: 1.1,
               letterSpacing: "-1px",
-              fontFamily: "Playfair Display",
+              fontFamily: "serif",
               fontStyle: "italic",
               display: "flex",
             }}
@@ -81,7 +70,6 @@ export default async function Image() {
             color: "#6e6e73",
             lineHeight: 1.8,
             display: "flex",
-            fontFamily: "sans-serif",
           }}
         >
           단순한 좌우 구분을 넘어 경제·사회·성향·정보소비 네 가지 축으로 분석합니다.
@@ -95,8 +83,7 @@ export default async function Image() {
             fontSize: 24,
             fontWeight: 700,
             color: "#1a3a6e",
-            letterSpacing: "-0.2px",
-            fontFamily: "Playfair Display",
+            fontFamily: "serif",
             display: "flex",
           }}
         >
@@ -104,13 +91,6 @@ export default async function Image() {
         </div>
       </div>
     ),
-    {
-      width: 1200,
-      height: 630,
-      fonts: [
-        { name: "Playfair Display", data: playfairData, weight: 700, style: "normal" },
-        { name: "Playfair Display", data: playfairItalicData, weight: 700, style: "italic" },
-      ],
-    }
+    { width: 1200, height: 630 }
   );
 }
