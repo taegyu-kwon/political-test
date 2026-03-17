@@ -30,20 +30,6 @@ export default async function Image() {
           position: "relative",
         }}
       >
-        {/* 좌측 라인 */}
-        <div
-          style={{
-            position: "absolute",
-            left: 0,
-            top: 0,
-            bottom: 0,
-            width: 12,
-            background: "linear-gradient(to bottom, #1d4ed8, #b91c1c)",
-            display: "flex",
-          }}
-        />
-
-        {/* 태그라인 */}
         <div
           style={{
             fontSize: 20,
@@ -59,15 +45,7 @@ export default async function Image() {
           판별 결과
         </div>
 
-        {/* 메인 타이틀 */}
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: 4,
-            marginBottom: 28,
-          }}
-        >
+        <div style={{ display: "flex", flexDirection: "column", gap: 4, marginBottom: 28 }}>
           <div
             style={{
               fontSize: 88,
@@ -97,7 +75,6 @@ export default async function Image() {
           </div>
         </div>
 
-        {/* 설명 */}
         <div
           style={{
             fontSize: 24,
@@ -110,7 +87,6 @@ export default async function Image() {
           친구가 공유한 결과입니다. 나도 검사해보세요!
         </div>
 
-        {/* 하단 앱 이름 */}
         <div
           style={{
             position: "absolute",
@@ -126,37 +102,14 @@ export default async function Image() {
         >
           정치성향판별기
         </div>
-
-        {/* 하단 스펙트럼 바 */}
-        <div
-          style={{
-            position: "absolute",
-            bottom: 0,
-            left: 12,
-            right: 0,
-            height: 8,
-            background: "linear-gradient(to right, #1d4ed8, #9ca3af, #b91c1c)",
-            display: "flex",
-          }}
-        />
       </div>
     ),
     {
       width: 1200,
       height: 630,
       fonts: [
-        {
-          name: "Playfair Display",
-          data: playfairData,
-          weight: 700,
-          style: "normal",
-        },
-        {
-          name: "Playfair Display",
-          data: playfairItalicData,
-          weight: 700,
-          style: "italic",
-        },
+        { name: "Playfair Display", data: playfairData, weight: 700, style: "normal" },
+        { name: "Playfair Display", data: playfairItalicData, weight: 700, style: "italic" },
       ],
     }
   );
