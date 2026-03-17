@@ -6,16 +6,6 @@ export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
 export default async function Image() {
-  const playfairRes = await fetch(
-    "https://fonts.gstatic.com/s/playfairdisplay/v37/nuFvD-vYSZviVYUb_rj3ij__anPXJzDwcbmjWBN2PKdFvXDXbtM.woff2"
-  );
-  const playfairData = await playfairRes.arrayBuffer();
-
-  const playfairItalicRes = await fetch(
-    "https://fonts.gstatic.com/s/playfairdisplay/v37/nuFRD-vYSZviVYUb_rj3ij__anPXDTzYh0c7AAFe.woff2"
-  );
-  const playfairItalicData = await playfairItalicRes.arrayBuffer();
-
   return new ImageResponse(
     (
       <div
@@ -39,7 +29,6 @@ export default async function Image() {
             textTransform: "uppercase",
             marginBottom: 28,
             display: "flex",
-            fontFamily: "sans-serif",
           }}
         >
           판별 결과
@@ -53,7 +42,7 @@ export default async function Image() {
               color: "#1c1c1e",
               lineHeight: 1.1,
               letterSpacing: "-1px",
-              fontFamily: "Playfair Display",
+              fontFamily: "serif",
               display: "flex",
             }}
           >
@@ -66,7 +55,7 @@ export default async function Image() {
               color: "#1a3a6e",
               lineHeight: 1.1,
               letterSpacing: "-1px",
-              fontFamily: "Playfair Display",
+              fontFamily: "serif",
               fontStyle: "italic",
               display: "flex",
             }}
@@ -81,7 +70,6 @@ export default async function Image() {
             color: "#6e6e73",
             lineHeight: 1.8,
             display: "flex",
-            fontFamily: "sans-serif",
           }}
         >
           친구가 공유한 결과입니다. 나도 검사해보세요!
@@ -95,8 +83,7 @@ export default async function Image() {
             fontSize: 24,
             fontWeight: 700,
             color: "#1a3a6e",
-            letterSpacing: "-0.2px",
-            fontFamily: "Playfair Display",
+            fontFamily: "serif",
             display: "flex",
           }}
         >
@@ -104,13 +91,6 @@ export default async function Image() {
         </div>
       </div>
     ),
-    {
-      width: 1200,
-      height: 630,
-      fonts: [
-        { name: "Playfair Display", data: playfairData, weight: 700, style: "normal" },
-        { name: "Playfair Display", data: playfairItalicData, weight: 700, style: "italic" },
-      ],
-    }
+    { width: 1200, height: 630 }
   );
 }
