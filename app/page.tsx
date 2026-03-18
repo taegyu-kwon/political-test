@@ -268,8 +268,19 @@ export default function Home() {
           .stat:nth-child(2) { border-right: none; }
           .stat:nth-child(3) { border-top: 1px solid var(--border); }
           .stat:nth-child(4) { border-top: 1px solid var(--border); }
-          .footer { padding: 40px 0; flex-direction: column; gap: 8px; }
-          .parts-card { margin-bottom: 120px; }
+          .parts-card { margin-bottom: 32px; }
+          .footer {
+            padding: 24px 0 40px;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            text-align: center;
+          }
+          .footer-right {
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+          }
         }
       `}</style>
 
