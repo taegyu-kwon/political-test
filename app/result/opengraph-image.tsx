@@ -20,20 +20,6 @@ export default async function Image() {
           position: "relative",
         }}
       >
-        <div
-          style={{
-            fontSize: 20,
-            fontWeight: 600,
-            color: "#2e5fad",
-            letterSpacing: "0.14em",
-            textTransform: "uppercase",
-            marginBottom: 28,
-            display: "flex",
-          }}
-        >
-          판별 결과
-        </div>
-
         <div style={{ display: "flex", flexDirection: "column", gap: 4, marginBottom: 28 }}>
           <div
             style={{
