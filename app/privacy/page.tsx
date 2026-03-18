@@ -208,7 +208,7 @@ export default function PrivacyPage() {
 
         <div className="section">
           <h2>4. 제3자 제공</h2>
-          <p>개인을 식별할 수 없는 익명 통계 데이터에 한해, 언론사·연구기관·정치 관련 기관에 제공될 수 있습니다. 원칙적으로 이용자의 개인정보를 제3자에게 제공하지 않습니다.</p>
+          <p>개인을 식별할 수 없는 익명 통계 데이터에 한해, 언론사·연구기관·정치 관련 기관에 공유될 수 있습니다.</p>
         </div>
 
         <div className="section">
