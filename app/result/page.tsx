@@ -413,7 +413,7 @@ function ResultContent() {
           font-weight: 500;
           color: var(--ink);
           cursor: pointer;
-          text-align: left;
+          text-align: center;
           transition: background 0.12s;
           display: flex;
           align-items: center;
@@ -460,7 +460,7 @@ function ResultContent() {
       <div className="page">
         {isShared && (
           <div className="shared-banner">
-            📊 친구가 공유한 정치성향 결과입니다. 나도 검사해보세요!
+             당신의 정치 성향은 무엇인가요? 확인해보세요!
           </div>
         )}
 
@@ -511,10 +511,10 @@ function ResultContent() {
                 {showShareMenu && (
                   <div className="share-menu">
                     <button className="share-menu-item" onClick={handleCopyLink}>
-                      📋 링크 복사
+                      링크 복사
                     </button>
                     <button className="share-menu-item" onClick={handleSaveImage}>
-                      🖼️ 이미지 저장
+                      이미지 저장
                     </button>
                   </div>
                 )}
