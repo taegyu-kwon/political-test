@@ -110,7 +110,6 @@ function ResultContent() {
     });
   }, []);
 
-  // 외부 클릭 시 메뉴 닫기
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (shareMenuRef.current && !shareMenuRef.current.contains(e.target as Node)) {
@@ -145,11 +144,33 @@ function ResultContent() {
     const canvas = await html2canvas(captureRef.current, {
       backgroundColor: "#ffffff",
       scale: 2,
+      useCORS: true,
+      allowTaint: true,
+      onclone: (doc) => {
+        const bar = doc.querySelector(".spectrum-bar-bg") as HTMLElement;
+        if (bar) bar.style.overflow = "hidden";
+        const track = doc.querySelector(".spectrum-track") as HTMLElement;
+        if (track) track.style.borderRadius = "5px";
+      },
     });
-    const link = document.createElement("a");
-    link.download = `정치성향_${main.label}.png`;
-    link.href = canvas.toDataURL("image/png");
-    link.click();
+
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    if (isMobile && navigator.share) {
+      canvas.toBlob(async (blob) => {
+        if (!blob) return;
+        const file = new File([blob], `정치성향_${main.label}.png`, { type: "image/png" });
+        try {
+          await navigator.share({ files: [file] });
+        } catch {
+          // 공유 취소 시 무시
+        }
+      }, "image/png");
+    } else {
+      const link = document.createElement("a");
+      link.download = `정치성향_${main.label}.png`;
+      link.href = canvas.toDataURL("image/png");
+      link.click();
+    }
   };
 
   return (
@@ -241,7 +262,7 @@ function ResultContent() {
           font-weight: 700;
           letter-spacing: -2px;
           line-height: 1;
-          margin-bottom: 8px;
+          margin-bottom: 16px;
         }
 
         .main-en {
@@ -417,7 +438,7 @@ function ResultContent() {
           transition: background 0.12s;
           display: flex;
           align-items: center;
-          gap: 10px;
+          justify-content: center;
         }
 
         .share-menu-item:hover { background: var(--blue-light); }
@@ -443,7 +464,7 @@ function ResultContent() {
           .logo { font-size: 17px; }
           .page { padding: 24px 20px 56px; }
           .sub-grid { grid-template-columns: 1fr; }
-          .main-label { font-size: 64px; }
+          .main-label { font-size: 64px; margin-bottom: 20px; }
           .main-result { padding: 32px 24px; }
           .btn-row { flex-wrap: nowrap; gap: 8px; }
           .btn-retry { max-width: 100%; font-size: 13px; padding: 12px 14px; }
@@ -460,7 +481,7 @@ function ResultContent() {
       <div className="page">
         {isShared && (
           <div className="shared-banner">
-             당신의 정치 성향은 무엇인가요? 확인해보세요!
+            📊 당신의 정치 성향은 무엇인가요? 확인해보세요!
           </div>
         )}
 
