@@ -156,7 +156,7 @@ function ResultContent() {
         if (track) track.style.borderRadius = "5px";
         const marker = doc.querySelector(".spectrum-marker") as HTMLElement;
         if (marker) {
-          marker.style.top = "-3px";
+          marker.style.top = "-6px";
           marker.style.width = "16px";
           marker.style.height = "16px";
           marker.style.borderRadius = "50%";
@@ -298,7 +298,7 @@ function ResultContent() {
         }
 
         .spectrum-bar-bg {
-          height: 10px;
+          height: 4px;
           background: var(--paper);
           border-radius: 5px;
           border: 1px solid var(--border);
@@ -315,7 +315,7 @@ function ResultContent() {
 
         .spectrum-marker {
           position: absolute;
-          top: -3px;
+          top: -6px;
           width: 16px;
           height: 16px;
           border-radius: 50%;
