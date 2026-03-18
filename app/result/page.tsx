@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { Suspense, useEffect, useRef } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import { questions } from "@/data/questions";
 import { useTestStore } from "@/store/testStore";
 import { supabase } from "@/lib/supabase";
@@ -68,6 +68,8 @@ function ResultContent() {
   const { answers, demo, reset } = useTestStore();
   const savedRef = useRef(false);
   const captureRef = useRef<HTMLDivElement>(null);
+  const [showShareMenu, setShowShareMenu] = useState(false);
+  const shareMenuRef = useRef<HTMLDivElement>(null);
 
   const sharedLabel = searchParams.get("label");
   const sharedP1 = searchParams.get("p1");
@@ -94,11 +96,9 @@ function ResultContent() {
     { title: "판단 방식", ...sub.judgment },
   ];
 
-  // 결과 페이지 진입 시 한 번만 저장
   useEffect(() => {
     if (isShared || savedRef.current) return;
     savedRef.current = true;
-
     supabase.from("responses").insert({
       age: demo?.age ?? null,
       gender: demo?.gender ?? null,
@@ -110,7 +110,18 @@ function ResultContent() {
     });
   }, []);
 
-  const handleShare = () => {
+  // 외부 클릭 시 메뉴 닫기
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (shareMenuRef.current && !shareMenuRef.current.contains(e.target as Node)) {
+        setShowShareMenu(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const handleCopyLink = () => {
     const s = calcSubResults(answers);
     const params = new URLSearchParams({
       label: main.label,
@@ -121,11 +132,15 @@ function ResultContent() {
       p4: s.judgment.label,
     });
     const url = `${window.location.origin}/result?${params.toString()}`;
-    navigator.clipboard.writeText(url).then(() => alert("링크가 복사되었습니다!"));
+    navigator.clipboard.writeText(url).then(() => {
+      alert("링크가 복사되었습니다!");
+      setShowShareMenu(false);
+    });
   };
 
   const handleSaveImage = async () => {
     if (!captureRef.current) return;
+    setShowShareMenu(false);
     const html2canvas = (await import("html2canvas")).default;
     const canvas = await html2canvas(captureRef.current, {
       backgroundColor: "#ffffff",
@@ -353,7 +368,14 @@ function ResultContent() {
           box-shadow: 0 6px 20px rgba(26,58,110,0.2);
         }
 
+        .share-wrap {
+          position: relative;
+          flex: 1;
+          max-width: 220px;
+        }
+
         .btn-share {
+          width: 100%;
           background: var(--white);
           border: 1.5px solid var(--blue);
           color: var(--blue);
@@ -364,26 +386,42 @@ function ResultContent() {
           border-radius: 8px;
           cursor: pointer;
           transition: all 0.15s;
-          flex: 1;
-          max-width: 220px;
         }
 
         .btn-share:hover { background: var(--blue-light); }
 
-        .btn-save {
+        .share-menu {
+          position: absolute;
+          bottom: calc(100% + 8px);
+          left: 0;
           background: var(--white);
-          border: 1.5px solid var(--border);
-          color: var(--ink-muted);
-          padding: 17px 28px;
-          font-family: 'Inter', sans-serif;
-          font-size: 15px;
-          font-weight: 600;
-          border-radius: 8px;
-          cursor: pointer;
-          transition: all 0.15s;
+          border: 1px solid var(--border);
+          border-radius: 10px;
+          box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+          overflow: hidden;
+          min-width: 180px;
+          z-index: 10;
         }
 
-        .btn-save:hover { border-color: var(--blue); color: var(--blue); }
+        .share-menu-item {
+          width: 100%;
+          padding: 14px 20px;
+          background: none;
+          border: none;
+          font-family: 'Inter', sans-serif;
+          font-size: 15px;
+          font-weight: 500;
+          color: var(--ink);
+          cursor: pointer;
+          text-align: left;
+          transition: background 0.12s;
+          display: flex;
+          align-items: center;
+          gap: 10px;
+        }
+
+        .share-menu-item:hover { background: var(--blue-light); }
+        .share-menu-item + .share-menu-item { border-top: 1px solid var(--border); }
 
         .btn-home {
           background: var(--white);
@@ -409,8 +447,8 @@ function ResultContent() {
           .main-result { padding: 32px 24px; }
           .btn-row { flex-wrap: nowrap; gap: 8px; }
           .btn-retry { max-width: 100%; font-size: 13px; padding: 12px 14px; }
-          .btn-share { max-width: 100%; font-size: 13px; padding: 12px 14px; }
-          .btn-save { font-size: 13px; padding: 12px 14px; }
+          .share-wrap { max-width: 100%; }
+          .btn-share { font-size: 13px; padding: 12px 14px; }
           .btn-home { font-size: 13px; padding: 12px 14px; }
         }
       `}</style>
@@ -466,9 +504,21 @@ function ResultContent() {
               <button className="btn-retry" onClick={() => { reset(); router.push("/intro"); }}>
                 다시하기
               </button>
-              <button className="btn-share" onClick={handleShare}>
-                결과 공유하기
-              </button>
+              <div className="share-wrap" ref={shareMenuRef}>
+                <button className="btn-share" onClick={() => setShowShareMenu((v) => !v)}>
+                  결과 공유하기
+                </button>
+                {showShareMenu && (
+                  <div className="share-menu">
+                    <button className="share-menu-item" onClick={handleCopyLink}>
+                      📋 링크 복사
+                    </button>
+                    <button className="share-menu-item" onClick={handleSaveImage}>
+                      🖼️ 이미지 저장
+                    </button>
+                  </div>
+                )}
+              </div>
             </>
           )}
           {isShared && (
@@ -476,9 +526,6 @@ function ResultContent() {
               나도 검사하기
             </button>
           )}
-          <button className="btn-save" onClick={handleSaveImage}>
-            이미지 저장
-          </button>
           <button className="btn-home" onClick={() => router.push("/")}>
             홈으로
           </button>
