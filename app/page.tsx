@@ -106,9 +106,7 @@ export default function Home() {
           line-height: 1.8;
         }
 
-        /* PC에서는 보임, 모바일에서는 숨김 */
         .pc-br { display: block; }
-        /* 모바일에서는 보임, PC에서는 숨김 */
         .mo-br { display: none; }
 
         .cta-row {
@@ -226,7 +224,23 @@ export default function Home() {
           color: var(--ink-muted);
           display: flex;
           justify-content: space-between;
+          align-items: center;
         }
+
+        .footer-right {
+          display: flex;
+          align-items: center;
+          gap: 20px;
+        }
+
+        .footer-link {
+          color: var(--ink-muted);
+          text-decoration: none;
+          cursor: pointer;
+          transition: color 0.15s;
+        }
+
+        .footer-link:hover { color: var(--blue); }
 
         @keyframes fadeUp {
           from { opacity: 0; transform: translateY(16px); }
@@ -324,7 +338,10 @@ export default function Home() {
 
         <footer className="footer">
           <span>© 2026 정치성향판별기</span>
-          <span>더 나은 정치 문화를 함께 만들어갑니다.</span>
+          <div className="footer-right">
+            <span>더 나은 정치 문화를 함께 만들어갑니다.</span>
+            <a className="footer-link" onClick={() => router.push("/privacy")}>개인정보처리방침</a>
+          </div>
         </footer>
       </div>
     </>
