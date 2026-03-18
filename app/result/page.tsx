@@ -67,6 +67,7 @@ function ResultContent() {
   const searchParams = useSearchParams();
   const { answers, demo, reset } = useTestStore();
   const savedRef = useRef(false);
+  const captureRef = useRef<HTMLDivElement>(null);
 
   const sharedLabel = searchParams.get("label");
   const sharedP1 = searchParams.get("p1");
@@ -121,6 +122,19 @@ function ResultContent() {
     });
     const url = `${window.location.origin}/result?${params.toString()}`;
     navigator.clipboard.writeText(url).then(() => alert("링크가 복사되었습니다!"));
+  };
+
+  const handleSaveImage = async () => {
+    if (!captureRef.current) return;
+    const html2canvas = (await import("html2canvas")).default;
+    const canvas = await html2canvas(captureRef.current, {
+      backgroundColor: "#ffffff",
+      scale: 2,
+    });
+    const link = document.createElement("a");
+    link.download = `정치성향_${main.label}.png`;
+    link.href = canvas.toDataURL("image/png");
+    link.click();
   };
 
   return (
@@ -356,6 +370,21 @@ function ResultContent() {
 
         .btn-share:hover { background: var(--blue-light); }
 
+        .btn-save {
+          background: var(--white);
+          border: 1.5px solid var(--border);
+          color: var(--ink-muted);
+          padding: 17px 28px;
+          font-family: 'Inter', sans-serif;
+          font-size: 15px;
+          font-weight: 600;
+          border-radius: 8px;
+          cursor: pointer;
+          transition: all 0.15s;
+        }
+
+        .btn-save:hover { border-color: var(--blue); color: var(--blue); }
+
         .btn-home {
           background: var(--white);
           border: 1.5px solid var(--border);
@@ -381,6 +410,7 @@ function ResultContent() {
           .btn-row { flex-wrap: nowrap; gap: 8px; }
           .btn-retry { max-width: 100%; font-size: 13px; padding: 12px 14px; }
           .btn-share { max-width: 100%; font-size: 13px; padding: 12px 14px; }
+          .btn-save { font-size: 13px; padding: 12px 14px; }
           .btn-home { font-size: 13px; padding: 12px 14px; }
         }
       `}</style>
@@ -396,7 +426,7 @@ function ResultContent() {
           </div>
         )}
 
-        <div className="main-result">
+        <div className="main-result" ref={captureRef}>
           <p className="main-eyebrow">판별 결과</p>
           <h1 className="main-label" style={{ color: main.color }}>{main.label}</h1>
           <p className="main-en">{main.en}</p>
@@ -446,6 +476,9 @@ function ResultContent() {
               나도 검사하기
             </button>
           )}
+          <button className="btn-save" onClick={handleSaveImage}>
+            이미지 저장
+          </button>
           <button className="btn-home" onClick={() => router.push("/")}>
             홈으로
           </button>
