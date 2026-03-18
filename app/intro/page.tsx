@@ -136,6 +136,8 @@ export default function IntroPage() {
           line-height: 1.7;
         }
 
+        .mo-br { display: none; }
+
         .section { margin-bottom: 40px; }
 
         .section-label {
@@ -240,6 +242,7 @@ export default function IntroPage() {
           .region-chip { font-size: 13px; }
           .region-grid { grid-template-columns: repeat(auto-fill, minmax(76px, 1fr)); }
           .btn-start { font-size: 15px; padding: 15px 32px; }
+          .mo-br { display: block; }
         }
       `}</style>
 
@@ -252,7 +255,7 @@ export default function IntroPage() {
           <p className="eyebrow">시작 전 기본 정보</p>
           <h1 className="title">검사를 시작하기 전에<br />간단한 정보를 입력해주세요</h1>
           <p className="subtitle">
-            입력하신 정보는 연령대·성별·지역별 정치 성향 분석에만 활용되며,<br />
+            입력하신 정보는 연령대·성별·지역별<br className="mo-br" /> 정치 성향 분석에만 활용되며,<br />
             개인을 특정하는 데 사용되지 않습니다.
           </p>
         </div>
