@@ -147,7 +147,6 @@ function ResultContent() {
       useCORS: true,
       allowTaint: true,
       onclone: (doc) => {
-        // 스펙트럼 바 overflow hidden + border-radius 고정
         const bar = doc.querySelector(".spectrum-bar-bg") as HTMLElement;
         if (bar) {
           bar.style.overflow = "hidden";
@@ -155,12 +154,11 @@ function ResultContent() {
         }
         const track = doc.querySelector(".spectrum-track") as HTMLElement;
         if (track) track.style.borderRadius = "5px";
-        // 마커를 바 안으로 위치 조정 (찌그러짐 방지)
         const marker = doc.querySelector(".spectrum-marker") as HTMLElement;
         if (marker) {
-          marker.style.top = "-5px";
-          marker.style.width = "20px";
-          marker.style.height = "20px";
+          marker.style.top = "-3px";
+          marker.style.width = "16px";
+          marker.style.height = "16px";
           marker.style.borderRadius = "50%";
           marker.style.boxSizing = "content-box";
         }
@@ -286,7 +284,7 @@ function ResultContent() {
           margin-bottom: 28px;
         }
 
-        .spectrum-wrap { margin-bottom: 28px; }
+        .spectrum-wrap { margin-bottom: 28px; padding: 4px 0; }
 
         .spectrum-label-row {
           display: flex;
@@ -317,14 +315,14 @@ function ResultContent() {
 
         .spectrum-marker {
           position: absolute;
-          top: -5px;
-          width: 20px;
-          height: 20px;
+          top: -3px;
+          width: 16px;
+          height: 16px;
           border-radius: 50%;
           background: var(--white);
-          border: 3px solid var(--ink);
+          border: 2.5px solid var(--ink);
           transform: translateX(-50%);
-          box-shadow: 0 1px 6px rgba(0,0,0,0.15);
+          box-shadow: 0 1px 4px rgba(0,0,0,0.15);
           transition: left 0.8s cubic-bezier(0.4,0,0.2,1);
           box-sizing: content-box;
         }
