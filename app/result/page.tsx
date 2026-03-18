@@ -147,10 +147,23 @@ function ResultContent() {
       useCORS: true,
       allowTaint: true,
       onclone: (doc) => {
+        // 스펙트럼 바 overflow hidden + border-radius 고정
         const bar = doc.querySelector(".spectrum-bar-bg") as HTMLElement;
-        if (bar) bar.style.overflow = "hidden";
+        if (bar) {
+          bar.style.overflow = "hidden";
+          bar.style.borderRadius = "5px";
+        }
         const track = doc.querySelector(".spectrum-track") as HTMLElement;
         if (track) track.style.borderRadius = "5px";
+        // 마커를 바 안으로 위치 조정 (찌그러짐 방지)
+        const marker = doc.querySelector(".spectrum-marker") as HTMLElement;
+        if (marker) {
+          marker.style.top = "-5px";
+          marker.style.width = "20px";
+          marker.style.height = "20px";
+          marker.style.borderRadius = "50%";
+          marker.style.boxSizing = "content-box";
+        }
       },
     });
 
@@ -262,7 +275,7 @@ function ResultContent() {
           font-weight: 700;
           letter-spacing: -2px;
           line-height: 1;
-          margin-bottom: 16px;
+          margin-bottom: 32px;
         }
 
         .main-en {
@@ -313,6 +326,7 @@ function ResultContent() {
           transform: translateX(-50%);
           box-shadow: 0 1px 6px rgba(0,0,0,0.15);
           transition: left 0.8s cubic-bezier(0.4,0,0.2,1);
+          box-sizing: content-box;
         }
 
         .main-desc {
@@ -464,7 +478,7 @@ function ResultContent() {
           .logo { font-size: 17px; }
           .page { padding: 24px 20px 56px; }
           .sub-grid { grid-template-columns: 1fr; }
-          .main-label { font-size: 64px; margin-bottom: 20px; }
+          .main-label { font-size: 64px; margin-bottom: 32px; }
           .main-result { padding: 32px 24px; }
           .btn-row { flex-wrap: nowrap; gap: 8px; }
           .btn-retry { max-width: 100%; font-size: 13px; padding: 12px 14px; }
@@ -481,7 +495,7 @@ function ResultContent() {
       <div className="page">
         {isShared && (
           <div className="shared-banner">
-            당신의 정치 성향은 무엇인가요? 확인해보세요!
+            📊 당신의 정치 성향은 무엇인가요? 확인해보세요!
           </div>
         )}
 
