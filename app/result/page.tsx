@@ -481,7 +481,7 @@ function ResultContent() {
       <div className="page">
         {isShared && (
           <div className="shared-banner">
-            📊 당신의 정치 성향은 무엇인가요? 확인해보세요!
+            당신의 정치 성향은 무엇인가요? 확인해보세요!
           </div>
         )}
 
