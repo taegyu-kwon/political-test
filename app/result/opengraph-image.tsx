@@ -58,7 +58,7 @@ export default async function Image() {
             display: "flex",
           }}
         >
-          친구가 공유한 결과입니다. 나도 검사해보세요!
+          친구가 공유한 결과입니다. 검사 후 결과를 친구와 공유해보세요!
         </div>
 
         <div
