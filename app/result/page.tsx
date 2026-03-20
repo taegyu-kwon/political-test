@@ -294,7 +294,7 @@ function ResultContent() {
           letter-spacing: 0.06em;
           text-transform: uppercase;
           color: var(--ink-muted);
-          margin-bottom: 16px;
+          margin-bottom: 24px;
         }
 
         .spectrum-bar-bg {
