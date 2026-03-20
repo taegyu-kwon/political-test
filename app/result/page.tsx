@@ -284,7 +284,7 @@ function ResultContent() {
           margin-bottom: 28px;
         }
 
-        .spectrum-wrap { margin-bottom: 28px; padding: 4px 0; }
+        .spectrum-wrap { margin-bottom: 28px; padding: 12px 0 4px; }
 
         .spectrum-label-row {
           display: flex;
