@@ -149,7 +149,6 @@ function ResultContent() {
       onclone: (doc) => {
         const bar = doc.querySelector(".spectrum-bar-bg") as HTMLElement;
         if (bar) {
-          bar.style.overflow = "hidden";
           bar.style.borderRadius = "5px";
         }
         const track = doc.querySelector(".spectrum-track") as HTMLElement;
