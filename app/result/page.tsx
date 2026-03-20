@@ -146,22 +146,6 @@ function ResultContent() {
       scale: 2,
       useCORS: true,
       allowTaint: true,
-      onclone: (doc) => {
-        const bar = doc.querySelector(".spectrum-bar-bg") as HTMLElement;
-        if (bar) {
-          bar.style.borderRadius = "5px";
-        }
-        const track = doc.querySelector(".spectrum-track") as HTMLElement;
-        if (track) track.style.borderRadius = "5px";
-        const marker = doc.querySelector(".spectrum-marker") as HTMLElement;
-        if (marker) {
-          marker.style.top = "-7px";
-          marker.style.width = "16px";
-          marker.style.height = "16px";
-          marker.style.borderRadius = "50%";
-          marker.style.boxSizing = "content-box";
-        }
-      },
     });
 
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
@@ -293,16 +277,25 @@ function ResultContent() {
           letter-spacing: 0.06em;
           text-transform: uppercase;
           color: var(--ink-muted);
-          margin-bottom: 30px;
+          margin-bottom: 16px;
+        }
+
+        /* 마커를 바 밖으로 꺼내기 위한 wrapper */
+        .spectrum-bar-wrap {
+          position: relative;
+          height: 22px;
+          display: flex;
+          align-items: center;
         }
 
         .spectrum-bar-bg {
+          position: absolute;
+          left: 0; right: 0;
           height: 8px;
           background: var(--paper);
           border-radius: 5px;
           border: 1px solid var(--border);
-          position: relative;
-          overflow: visible;
+          overflow: hidden;
         }
 
         .spectrum-track {
@@ -314,7 +307,6 @@ function ResultContent() {
 
         .spectrum-marker {
           position: absolute;
-          top: -7px;
           width: 16px;
           height: 16px;
           border-radius: 50%;
@@ -324,6 +316,7 @@ function ResultContent() {
           box-shadow: 0 1px 4px rgba(0,0,0,0.15);
           transition: left 0.8s cubic-bezier(0.4,0,0.2,1);
           box-sizing: content-box;
+          z-index: 1;
         }
 
         .main-desc {
@@ -509,8 +502,10 @@ function ResultContent() {
               <span>보수</span>
               <span>극우</span>
             </div>
-            <div className="spectrum-bar-bg">
-              <div className="spectrum-track" />
+            <div className="spectrum-bar-wrap">
+              <div className="spectrum-bar-bg">
+                <div className="spectrum-track" />
+              </div>
               <div className="spectrum-marker" style={{ left: `${main.bar}%` }} />
             </div>
           </div>
