@@ -24,26 +24,26 @@ export const questions: Question[] = [
   // Part 2 — 경제적 관점 (economic, 메인결과용)
   // 복지/세금, 국가개입 vs 시장자율, 개인책임 vs 사회구조, 부의분배, 노동/기업
   { id: 11, text: "고소득자에게 더 높은 세율을 적용하는 것은 당연하다.", axis: "economic", direction: 1 },
-  { id: 12, text: "실패한 사람을 돕는 것보다 노력하는 사람에게 더 많은 기회를 주는 게 공정하다.", axis: "economic", direction: -1 },
+  { id: 12, text: "개인의 성공과 실패는 주로 본인의 노력에 달려있다.", axis: "economic", direction: -1 },
   { id: 13, text: "재벌 대기업에 대한 규제를 강화해야 한다.", axis: "economic", direction: 1 },
   { id: 14, text: "최저임금을 높이면 결국 일자리가 줄어든다.", axis: "economic", direction: -1 },
   { id: 15, text: "국가가 의료와 교육을 더 많이 책임져야 한다.", axis: "economic", direction: 1 },
   { id: 16, text: "부동산 시장은 국가가 강하게 개입해야 안정된다.", axis: "economic", direction: 1 },
-  { id: 17, text: "상속을 통한 부의 대물림은 사회적으로 문제가 있다.", axis: "economic", direction: 1 },
+  { id: 17, text: "상속은 개인의 재산권이므로 과도한 상속세는 부당하다.", axis: "economic", direction: -1 },
   { id: 18, text: "기업하기 좋은 환경을 만드는 것이 복지보다 더 중요하다.", axis: "economic", direction: -1 },
   { id: 19, text: "비정규직 문제는 기업의 자율에 맡기기보다 법으로 해결해야 한다.", axis: "economic", direction: 1 },
   { id: 20, text: "경제 성장이 이루어지면 혜택은 자연스럽게 아래로 흘러간다.", axis: "economic", direction: -1 },
 
   // Part 3 — 정치·가치관 (social, 메인결과용)
   // 표현/언론자유, 권력집중 vs 분산, 개인자유 vs 공동체, 소수자/다양성, 사법/제도
-  { id: 21, text: "정부에 비판적인 언론도 동등하게 보호받아야 한다.", axis: "social", direction: 1 },
+  { id: 21, text: "표현의 자유라 해도 혐오 표현이나 차별적 발언은 법으로 제한해야 한다.", axis: "social", direction: 1 },
   { id: 22, text: "위기 상황에서는 권력이 한 곳에 집중되는 게 효율적이다.", axis: "social", direction: -1 },
-  { id: 23, text: "검찰과 경찰은 정치권력으로부터 독립적이어야 한다.", axis: "social", direction: 1 },
-  { id: 24, text: "국가 안보를 위해서라면 개인 정보 수집도 허용될 수 있다.", axis: "social", direction: -1 },
-  { id: 25, text: "성별, 출신지역, 학벌에 따른 차별은 법으로 금지해야 한다.", axis: "social", direction: 1 },
+  { id: 23, text: "사회적 성취는 개인의 능력과 경쟁에 의해 결정되는 것이 바람직하다.", axis: "social", direction: -1 },
+  { id: 24, text: "남성만의 병역 의무는 현 시대에 맞게 재검토되어야 한다.", axis: "social", direction: -1 },
+  { id: 25, text: "북한에 대해서는 대화보다 강경한 대응이 우선되어야 한다.", axis: "social", direction: -1 },
   { id: 26, text: "동성 결혼 또는 동성 파트너십을 법적으로 인정해야 한다.", axis: "social", direction: 1 },
   { id: 27, text: "이민자와 외국인 노동자 수용을 확대하는 것은 사회에 도움이 된다.", axis: "social", direction: 1 },
-  { id: 28, text: "집회와 시위의 자유는 최대한 보장되어야 한다.", axis: "social", direction: 1 },
+  { id: 28, text: "노동조합의 파업권은 더 폭넓게 보장되어야 한다.", axis: "social", direction: 1 },
   { id: 29, text: "사회 질서 유지를 위해 강력한 공권력 행사가 필요할 때가 있다.", axis: "social", direction: -1 },
   { id: 30, text: "특정 집단을 위한 할당제나 우대 정책은 역차별이다.", axis: "social", direction: -1 },
 
