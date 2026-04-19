@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Script from "next/script";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,13 +31,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="ko">
       <head>
-        <Script
+        {/* ⚠️ Google AdSense - 절대 삭제/수정 금지! 삭제 시 광고 수익 중단됨 */}
+        <script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8705600841461056"
           crossOrigin="anonymous"
-          strategy="afterInteractive"
         />
       </head>
       <body
