@@ -39,7 +39,7 @@ export const questions: Question[] = [
   { id: 21, text: "표현의 자유라 해도 혐오 표현이나 차별적 발언은 법으로 제한해야 한다.", axis: "social", direction: 1 },
   { id: 22, text: "위기 상황에서는 권력이 한 곳에 집중되는 게 효율적이다.", axis: "social", direction: -1 },
   { id: 23, text: "사회적 성취는 개인의 능력과 경쟁에 의해 결정되는 것이 바람직하다.", axis: "social", direction: -1 },
-  { id: 24, text: "남성만의 병역 의무는 현 시대에 맞게 재검토되어야 한다.", axis: "social", direction: -1 },
+  { id: 24, text: "민주주의에서는 효율성보다 절차와 견제가 더 중요하다.", axis: "social", direction: 1 },
   { id: 25, text: "북한에 대해서는 대화보다 강경한 대응이 우선되어야 한다.", axis: "social", direction: -1 },
   { id: 26, text: "동성 결혼 또는 동성 파트너십을 법적으로 인정해야 한다.", axis: "social", direction: 1 },
   { id: 27, text: "이민자와 외국인 노동자 수용을 확대하는 것은 사회에 도움이 된다.", axis: "social", direction: 1 },
