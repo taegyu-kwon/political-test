@@ -31,7 +31,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko">
+    <html lang="en">
       <head>
         {/* ⚠️ Google AdSense - 절대 삭제/수정 금지! 삭제 시 광고 수익 중단됨 */}
         <script
