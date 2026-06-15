@@ -22,7 +22,7 @@ function getMainResult(score: number) {
   if (score >= 1.2) return { label: "극좌", en: "Far Left", desc: "국가의 강력한 개입과 급진적 평등을 지지합니다. 현 체제의 근본적 변화가 필요하다고 봅니다.", color: "#1d4ed8", bar: 5 };
   if (score >= 0.3) return { label: "진보", en: "Progressive", desc: "사회적 평등과 국가의 적극적 역할을 지지합니다. 점진적 개혁을 통한 변화를 추구합니다.", color: "#2563eb", bar: 30 };
   if (score >= -0.3) return { label: "중도", en: "Centrist", desc: "좌우 어느 쪽에도 강하게 치우치지 않습니다. 상황에 따라 유연하게 판단하는 편입니다.", color: "#6b7280", bar: 50 };
-  if (score >= -1.2) return { label: "보수", en: "Conservative", desc: "전통적 가치와 시장 자율을 중시합니다. 안정적이고 검증된 제도를 선호합니다.", color: "#dc2626", bar: 70 };
+  if (score >= -1.6) return { label: "보수", en: "Conservative", desc: "전통적 가치와 시장 자율을 중시합니다. 안정적이고 검증된 제도를 선호합니다.", color: "#dc2626", bar: 70 };
   return { label: "극우", en: "Far Right", desc: "강한 시장 자유와 전통 질서를 지지합니다. 국가 개입 최소화와 개인 책임을 강조합니다.", color: "#b91c1c", bar: 95 };
 }
 
