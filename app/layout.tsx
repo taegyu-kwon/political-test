@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import Script from "next/script";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -44,6 +45,11 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         {children}
+        {/* ⚠️ 카카오 애드핏 - 절대 삭제/수정 금지! 삭제 시 광고 수익 중단됨 */}
+        <Script
+          src="//t1.kakaocdn.net/kas/static/ba.min.js"
+          strategy="afterInteractive"
+        />
       </body>
     </html>
   );
