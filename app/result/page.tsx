@@ -280,7 +280,6 @@ function ResultContent() {
           margin-bottom: 16px;
         }
 
-        /* 마커를 바 밖으로 꺼내기 위한 wrapper */
         .spectrum-bar-wrap {
           position: relative;
           height: 22px;
@@ -323,6 +322,13 @@ function ResultContent() {
           font-size: 17px;
           color: var(--ink-muted);
           line-height: 1.75;
+        }
+
+        .ad-slot {
+          width: 100%;
+          display: flex;
+          justify-content: center;
+          margin: 24px 0;
         }
 
         .sub-title {
@@ -513,6 +519,17 @@ function ResultContent() {
           <p className="main-desc">{main.desc}</p>
         </div>
 
+        {/* ⚠️ 카카오 애드핏 - 결과 상단 사각형 광고 (절대 삭제 금지) */}
+        <div className="ad-slot">
+          <ins
+            className="kakao_ad_area"
+            style={{ display: "none" }}
+            data-ad-unit="DAN-RMh52XHkAbC7uJkH"
+            data-ad-width="300"
+            data-ad-height="250"
+          />
+        </div>
+
         <h2 className="sub-title">부가 진단</h2>
         <div className="sub-grid">
           {subResults.map((r) => (
@@ -523,6 +540,17 @@ function ResultContent() {
               {r.desc && <p className="sub-card-desc">{r.desc}</p>}
             </div>
           ))}
+        </div>
+
+        {/* ⚠️ 카카오 애드핏 - 결과 본문 중간 광고 (절대 삭제 금지) */}
+        <div className="ad-slot">
+          <ins
+            className="kakao_ad_area"
+            style={{ display: "none" }}
+            data-ad-unit="DAN-s7Ok4w45SkWjn0Bw"
+            data-ad-width="300"
+            data-ad-height="250"
+          />
         </div>
 
         <div className="btn-row">
@@ -557,6 +585,18 @@ function ResultContent() {
             홈으로
           </button>
         </div>
+
+        {/* ⚠️ 카카오 애드핏 - 결과 하단 광고 (절대 삭제 금지) */}
+        <div className="ad-slot" style={{ marginTop: "32px" }}>
+          <ins
+            className="kakao_ad_area"
+            style={{ display: "none" }}
+            data-ad-unit="DAN-afRBJxwkOe5QWBcR"
+            data-ad-width="300"
+            data-ad-height="250"
+          />
+        </div>
+
       </div>
     </>
   );
