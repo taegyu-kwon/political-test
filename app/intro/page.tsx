@@ -138,6 +138,13 @@ export default function IntroPage() {
 
         .mo-br { display: none; }
 
+        .ad-slot {
+          width: 100%;
+          display: flex;
+          justify-content: center;
+          margin: 0 0 36px 0;
+        }
+
         .section { margin-bottom: 40px; }
 
         .section-label {
@@ -258,6 +265,17 @@ export default function IntroPage() {
             입력하신 정보는 연령대·성별·지역별<br className="mo-br" /> 정치 성향 분석에만 활용되며,<br />
             개인을 특정하는 데 사용되지 않습니다.
           </p>
+        </div>
+
+        {/* ⚠️ 카카오 애드핏 - 시작화면 배너 광고 (절대 삭제 금지) */}
+        <div className="ad-slot">
+          <ins
+            className="kakao_ad_area"
+            style={{ display: "none" }}
+            data-ad-unit="DAN-IeMZulG2MohtOm3y"
+            data-ad-width="320"
+            data-ad-height="100"
+          />
         </div>
 
         <div className="section">
