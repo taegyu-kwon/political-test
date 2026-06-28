@@ -233,6 +233,22 @@ export default function Home() {
           gap: 20px;
         }
 
+        .footer-left {
+          display: flex;
+          align-items: center;
+          gap: 16px;
+        }
+
+        .footer-insta {
+          color: var(--blue);
+          font-weight: 600;
+          text-decoration: none;
+          cursor: pointer;
+          transition: opacity 0.15s;
+        }
+
+        .footer-insta:hover { opacity: 0.7; }
+
         .footer-link {
           color: var(--ink-muted);
           text-decoration: none;
@@ -276,6 +292,12 @@ export default function Home() {
             gap: 8px;
             text-align: center;
           }
+          .footer-left {
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+          }
+
           .footer-right {
             flex-direction: column;
             align-items: center;
@@ -348,7 +370,15 @@ export default function Home() {
         </div>
 
         <footer className="footer">
-          <span>© 2026 정치성향판별기</span>
+          <div className="footer-left">
+            <span>© 2026 정치성향판별기</span>
+            <a
+              className="footer-insta"
+              href="https://www.instagram.com/jungpan_official"
+              target="_blank"
+              rel="noopener noreferrer"
+            >정판 인스타 바로가기 ↗</a>
+          </div>
           <div className="footer-right">
             <span>더 나은 정치 문화를 함께 만들어갑니다.</span>
             <a className="footer-link" onClick={() => router.push("/privacy")}>개인정보처리방침</a>
