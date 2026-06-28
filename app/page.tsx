@@ -377,7 +377,7 @@ export default function Home() {
               href="https://www.instagram.com/jungpan_official"
               target="_blank"
               rel="noopener noreferrer"
-            >정판 인스타 바로가기 ↗</a>
+            >정판 인스타 바로가기</a>
           </div>
           <div className="footer-right">
             <span>더 나은 정치 문화를 함께 만들어갑니다.</span>
