@@ -322,6 +322,13 @@ export default function TestPage() {
 
         .btn-next:disabled { opacity: 0.4; cursor: not-allowed; }
 
+        .ad-slot {
+          width: 100%;
+          display: flex;
+          justify-content: center;
+          margin: 16px 0;
+        }
+
         @media (max-width: 560px) {
           .header { padding: 16px; }
           .logo { font-size: 17px; }
@@ -404,6 +411,17 @@ export default function TestPage() {
             </div>
           );
         })}
+
+        {/* 광고 B - 문항 하단 */}
+        <div className="ad-slot">
+          <ins
+            className="kakao_ad_area"
+            style={{ display: "none" }}
+            data-ad-unit="DAN-URWcjhP7SbdGTGSU"
+            data-ad-width="320"
+            data-ad-height="50"
+          />
+        </div>
 
         <nav className="nav">
           <button className="btn-prev" onClick={() => setPart(p => p - 1)} disabled={part === 0}>

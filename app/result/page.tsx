@@ -519,12 +519,12 @@ function ResultContent() {
           <p className="main-desc">{main.desc}</p>
         </div>
 
-        {/* ⚠️ 카카오 애드핏 - 결과 상단 사각형 광고 (절대 삭제 금지) */}
+        {/* ⚠️ 카카오 애드핏 - 결과 상단 광고 A (절대 삭제 금지) */}
         <div className="ad-slot">
           <ins
             className="kakao_ad_area"
             style={{ display: "none" }}
-            data-ad-unit="DAN-RMh52XHkAbC7uJkH"
+            data-ad-unit="DAN-TGImUBb4uYvyePW2"
             data-ad-width="300"
             data-ad-height="250"
           />
@@ -542,12 +542,12 @@ function ResultContent() {
           ))}
         </div>
 
-        {/* ⚠️ 카카오 애드핏 - 결과 본문 중간 광고 (절대 삭제 금지) */}
+        {/* ⚠️ 카카오 애드핏 - 결과 본문 중간 광고 A (절대 삭제 금지) */}
         <div className="ad-slot">
           <ins
             className="kakao_ad_area"
             style={{ display: "none" }}
-            data-ad-unit="DAN-s7Ok4w45SkWjn0Bw"
+            data-ad-unit="DAN-TGImUBb4uYvyePW2"
             data-ad-width="300"
             data-ad-height="250"
           />
@@ -586,14 +586,14 @@ function ResultContent() {
           </button>
         </div>
 
-        {/* ⚠️ 카카오 애드핏 - 결과 하단 광고 (절대 삭제 금지) */}
+        {/* ⚠️ 카카오 애드핏 - 결과 하단 광고 B (절대 삭제 금지) */}
         <div className="ad-slot" style={{ marginTop: "32px" }}>
           <ins
             className="kakao_ad_area"
             style={{ display: "none" }}
-            data-ad-unit="DAN-afRBJxwkOe5QWBcR"
-            data-ad-width="300"
-            data-ad-height="250"
+            data-ad-unit="DAN-URWcjhP7SbdGTGSU"
+            data-ad-width="320"
+            data-ad-height="50"
           />
         </div>
 

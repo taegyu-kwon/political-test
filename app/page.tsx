@@ -217,6 +217,13 @@ export default function Home() {
           color: var(--ink);
         }
 
+        .ad-slot {
+          width: 100%;
+          display: flex;
+          justify-content: center;
+          margin: 16px 0;
+        }
+
         .footer {
           padding: 24px 0;
           border-top: 1px solid var(--border);
@@ -311,6 +318,17 @@ export default function Home() {
       </header>
 
       <div className="page">
+        {/* 광고 B - 시작화면 상단 */}
+        <div className="ad-slot">
+          <ins
+            className="kakao_ad_area"
+            style={{ display: "none" }}
+            data-ad-unit="DAN-URWcjhP7SbdGTGSU"
+            data-ad-width="320"
+            data-ad-height="50"
+          />
+        </div>
+
         <main className="hero">
           <p className={`eyebrow ${mounted ? "f1" : ""}`}>가치관으로 읽는 나의 정치 성향</p>
           <h1 className={`title ${mounted ? "f2" : ""}`}>
