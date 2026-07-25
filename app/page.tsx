@@ -217,6 +217,30 @@ export default function Home() {
           color: var(--ink);
         }
 
+        .map-card {
+          background: var(--white);
+          border: 1px solid var(--border);
+          border-radius: 16px;
+          padding: 24px 28px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 16px;
+          cursor: pointer;
+          transition: box-shadow 0.15s, transform 0.15s;
+          text-decoration: none;
+          margin-bottom: 16px;
+        }
+        .map-card:hover { box-shadow: 0 6px 24px rgba(26,58,110,0.1); transform: translateY(-2px); }
+        .map-card-left {}
+        .map-card-badge {
+          font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+          color: var(--blue); margin-bottom: 6px;
+        }
+        .map-card-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
+        .map-card-desc { font-size: 14px; color: var(--ink-muted); }
+        .map-card-arrow { font-size: 22px; color: var(--blue); flex-shrink: 0; }
+
         .ad-slot {
           width: 100%;
           display: flex;
@@ -365,6 +389,15 @@ export default function Home() {
               <div className="stat-label">부가 진단</div>
             </div>
           </div>
+        </div>
+
+        <div className="map-card" onClick={() => router.push("/map")}>
+          <div className="map-card-left">
+            <p className="map-card-badge">New · 정치판세맵</p>
+            <p className="map-card-title">지역별 정치성향 분포</p>
+            <p className="map-card-desc">우리 지역은 진보? 보수? 지도로 한눈에 확인하세요.</p>
+          </div>
+          <span className="map-card-arrow">→</span>
         </div>
 
         <div className={`parts-card ${mounted ? "f6" : ""}`}>
