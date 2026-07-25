@@ -50,6 +50,27 @@ const EMPTY_SCORES: Record<SK, number> = {
   far_left: 0, left: 0, center: 0, right: 0, far_right: 0,
 };
 
+const SEED: Record<string, Omit<RD, "name" | "label">> = {
+  gyeonggi:  { participants: 31842, dominant: "중도",      lean:   3, scores: { far_left:  7, left: 24, center: 40, right: 22, far_right:  7 } },
+  seoul:     { participants: 18732, dominant: "중도",      lean:   0, scores: { far_left:  9, left: 24, center: 39, right: 20, far_right:  8 } },
+  incheon:   { participants:  7245, dominant: "중도",      lean:  -5, scores: { far_left:  8, left: 27, center: 38, right: 21, far_right:  6 } },
+  gangwon:   { participants:  5621, dominant: "중도 보수",  lean:  18, scores: { far_left:  5, left: 18, center: 37, right: 28, far_right: 12 } },
+  chungbuk:  { participants:  5234, dominant: "중도",      lean:  12, scores: { far_left:  6, left: 19, center: 38, right: 27, far_right: 10 } },
+  chungnam:  { participants:  6103, dominant: "중도",      lean:   8, scores: { far_left:  6, left: 21, center: 39, right: 25, far_right:  9 } },
+  daejeon:   { participants:  5238, dominant: "중도",      lean:  -3, scores: { far_left:  8, left: 26, center: 39, right: 21, far_right:  6 } },
+  sejong:    { participants:  1824, dominant: "중도",      lean:  -8, scores: { far_left:  9, left: 28, center: 37, right: 20, far_right:  6 } },
+  jeonbuk:   { participants:  5948, dominant: "진보",      lean: -32, scores: { far_left: 14, left: 32, center: 30, right: 17, far_right:  7 } },
+  jeonnam:   { participants:  4827, dominant: "진보",      lean: -42, scores: { far_left: 17, left: 35, center: 27, right: 15, far_right:  6 } },
+  gwangju:   { participants:  4213, dominant: "진보",      lean: -48, scores: { far_left: 20, left: 36, center: 25, right: 14, far_right:  5 } },
+  gyeongbuk: { participants:  7934, dominant: "보수",      lean:  42, scores: { far_left:  4, left: 13, center: 27, right: 36, far_right: 20 } },
+  gyeongnam: { participants:  9128, dominant: "보수",      lean:  32, scores: { far_left:  5, left: 16, center: 30, right: 33, far_right: 16 } },
+  daegu:     { participants:  6742, dominant: "보수",      lean:  45, scores: { far_left:  3, left: 11, center: 25, right: 37, far_right: 24 } },
+  ulsan:     { participants:  3891, dominant: "보수",      lean:  28, scores: { far_left:  5, left: 17, center: 31, right: 32, far_right: 15 } },
+  busan:     { participants:  8924, dominant: "중도 보수",  lean:  22, scores: { far_left:  5, left: 19, center: 33, right: 30, far_right: 13 } },
+  jeju:      { participants:  2198, dominant: "중도",      lean: -12, scores: { far_left:  9, left: 26, center: 37, right: 21, far_right:  7 } },
+};
+
+
 const PATHS: Record<string, { d: string; lx: number; ly: number; fs?: number }> = {
   gyeonggi: {
     d: "M139.7,207.4L142.8,208.3L142.4,210.5L149.6,217.4L163.4,212.3L171.9,218.0L172.3,215.4L178.4,212.8L178.1,210.3L181.2,209.3L182.5,206.5L187.7,207.1L189.0,204.6L190.4,205.1L192.3,202.5L191.9,198.9L195.9,199.8L199.1,194.1L199.6,183.0L202.3,178.4L199.7,172.9L204.9,169.3L201.7,166.8L196.7,166.7L190.4,161.8L187.8,163.6L186.6,162.6L188.0,156.7L184.7,156.4L187.0,153.5L185.9,148.3L190.4,145.2L191.0,140.2L187.1,138.4L186.7,135.8L182.2,134.9L180.8,127.7L173.8,128.7L171.2,126.5L171.6,122.1L168.0,125.6L164.5,118.0L161.6,118.0L160.9,114.7L153.8,118.8L151.9,123.8L152.9,125.4L149.3,125.5L146.7,127.7L146.3,132.8L144.1,135.6L135.5,139.2L136.7,145.6L134.8,147.9L135.0,152.2L130.9,153.7L126.4,152.5L127.3,161.6L129.6,165.8L132.8,165.5L134.5,162.9L140.1,167.1L142.7,167.0L143.3,165.3L146.3,167.8L149.0,166.4L149.7,162.4L151.8,161.3L153.9,163.0L155.8,158.2L160.5,159.1L161.1,169.0L165.3,167.2L165.7,169.8L163.1,172.4L164.2,173.9L158.8,178.4L155.0,175.6L149.1,178.0L147.2,173.6L144.0,175.0L144.4,170.1L141.1,169.1L139.7,174.1L141.8,176.8L139.7,181.8L136.3,185.5L127.7,189.1L129.4,192.7L128.1,194.9L132.0,194.8L131.9,193.0L134.0,196.1L133.8,190.3L130.0,188.5L135.5,185.8L144.1,188.1L142.5,192.1L133.9,189.6L134.5,198.8L136.9,198.9L136.2,201.9L140.5,206.1L139.7,207.4ZM140.5,206.0L136.3,201.9L142.7,197.2L142.1,198.9L144.0,199.5L140.7,201.5L140.5,206.0Z",
@@ -126,17 +147,19 @@ const DRAW_ORDER = [
   "seoul", "incheon", "daejeon", "sejong", "gwangju", "daegu", "ulsan", "busan",
 ];
 
-function emptyData(): Record<string, RD> {
+function seedData(): Record<string, RD> {
   return Object.fromEntries(
     Object.entries(REGIONS).map(([id, r]) => [
       id,
       {
         name: r.name,
         label: r.label,
-        participants: 0,
-        dominant: "데이터 없음",
-        lean: 0,
-        scores: { ...EMPTY_SCORES },
+        ...(SEED[id] ?? {
+          participants: 0,
+          dominant: "데이터 없음",
+          lean: 0,
+          scores: { ...EMPTY_SCORES },
+        }),
       },
     ])
   );
@@ -179,7 +202,14 @@ function aggregate(rows: { region: string | null; result: string | null }[]): Re
     counts[id][sk] += 1;
   }
 
-  const out = emptyData();
+  const liveTotal = Object.values(counts).reduce(
+    (sum, c) => sum + c.far_left + c.left + c.center + c.right + c.far_right,
+    0
+  );
+  // DB에 누적 응답이 없으면 기존 시드 통계를 그대로 사용
+  if (liveTotal === 0) return seedData();
+
+  const out = seedData();
   for (const id of Object.keys(REGIONS)) {
     const c = counts[id];
     const total = c.far_left + c.left + c.center + c.right + c.far_right;
@@ -191,7 +221,6 @@ function aggregate(rows: { region: string | null; result: string | null }[]): Re
       right: Math.round((c.right / total) * 100),
       far_right: Math.round((c.far_right / total) * 100),
     };
-    // Fix rounding drift so bars sum to 100
     const drift = 100 - (scores.far_left + scores.left + scores.center + scores.right + scores.far_right);
     if (drift !== 0) {
       const key = (Object.keys(scores) as SK[]).sort((a, b) => scores[b] - scores[a])[0];
@@ -259,7 +288,7 @@ const CATS: { key: SK; label: string; color: string }[] = [
 export default function MapPage() {
   const router = useRouter();
   const [sel, setSel] = useState("seoul");
-  const [data, setData] = useState<Record<string, RD>>(emptyData);
+  const [data, setData] = useState<Record<string, RD>>(seedData);
   const [loading, setLoading] = useState(true);
 
   const reload = async () => {
@@ -388,7 +417,7 @@ export default function MapPage() {
                 <path
                   key={id}
                   d={PATHS[id].d}
-                  fill={data[id].participants ? fillColor(data[id].lean) : "#e8e4dc"}
+                  fill={fillColor(data[id].lean)}
                   fillRule="evenodd"
                   stroke="white"
                   strokeWidth={sel === id ? "2.5" : "1"}
@@ -421,7 +450,7 @@ export default function MapPage() {
                 className="d-badge"
                 style={{ background: badgeBg(d.lean), color: badgeColor(d.lean) }}
               >
-                {d.participants ? `${d.dominant} 우세` : "아직 데이터가 없습니다"}
+                {d.dominant} 우세
               </div>
               <div className="bars">
                 {CATS.map(cat => (
