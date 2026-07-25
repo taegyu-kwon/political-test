@@ -237,8 +237,8 @@ export default function Home() {
           font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
           color: var(--blue); margin-bottom: 6px;
         }
-        .map-card-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
-        .map-card-desc { font-size: 14px; color: var(--ink-muted); }
+        .map-card-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: var(--blue); margin-bottom: 4px; }
+        .map-card-desc { font-size: 14px; color: var(--blue); opacity: 0.7; }
         .map-card-arrow { font-size: 22px; color: var(--blue); flex-shrink: 0; }
 
         .ad-slot {

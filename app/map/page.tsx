@@ -33,27 +33,78 @@ const DATA: Record<string, RD> = {
   jeju:      { name: "제주특별자치도", label: "제주",   participants:  2198, dominant: "중도",      lean: -12, scores: { far_left:  9, left: 26, center: 37, right: 21, far_right:  7 } },
 };
 
+// Coordinate system: x=(lon-124.5)*77, y=(38.8-lat)*98  viewBox="0 0 480 580"
 const PATHS: Record<string, { d: string; lx: number; ly: number; fs?: number }> = {
-  gyeonggi:  { d: "M175,155 L205,138 L252,133 L290,148 L298,182 L288,215 L262,242 L238,252 L205,248 L178,232 L155,212 L148,185 Z", lx: 222, ly: 195 },
-  seoul:     { d: "M214,177 L232,172 L248,180 L250,197 L237,208 L219,208 L207,197 Z", lx: 229, ly: 192, fs: 9 },
-  incheon:   { d: "M148,172 L168,164 L182,175 L180,205 L160,215 L142,208 L138,188 Z", lx: 161, ly: 192, fs: 9 },
-  gangwon:   { d: "M292,135 L420,130 L424,158 L410,208 L395,248 L368,270 L335,275 L297,260 L287,230 L290,188 L292,158 Z", lx: 358, ly: 202 },
-  chungbuk:  { d: "M238,252 L292,248 L322,268 L318,308 L295,325 L264,328 L236,312 L226,285 L230,262 Z", lx: 276, ly: 292 },
-  chungnam:  { d: "M148,248 L204,245 L230,262 L226,298 L220,328 L194,348 L160,348 L132,330 L122,303 L128,270 Z", lx: 175, ly: 298 },
-  daejeon:   { d: "M220,320 L242,317 L250,332 L241,345 L220,345 L211,330 Z", lx: 231, ly: 333, fs: 9 },
-  sejong:    { d: "M207,296 L222,292 L228,305 L218,315 L204,308 Z", lx: 215, ly: 304, fs: 7 },
-  jeonbuk:   { d: "M138,348 L194,345 L220,350 L255,340 L266,368 L267,398 L240,415 L198,418 L155,408 L135,387 L133,362 Z", lx: 198, ly: 382 },
-  jeonnam:   { d: "M138,408 L198,418 L240,418 L267,408 L272,445 L257,477 L225,495 L190,492 L160,478 L133,457 L122,432 L130,411 Z", lx: 193, ly: 458 },
-  gwangju:   { d: "M192,430 L218,427 L226,445 L218,458 L194,458 L184,443 Z", lx: 205, ly: 445, fs: 9 },
-  gyeongbuk: { d: "M296,260 L335,253 L375,258 L420,272 L422,318 L403,360 L372,383 L334,388 L303,375 L276,342 L271,304 L281,270 Z", lx: 352, ly: 318 },
-  gyeongnam: { d: "M265,408 L303,378 L337,390 L368,393 L397,417 L397,452 L376,472 L337,483 L293,478 L263,458 L253,428 L258,410 Z", lx: 322, ly: 438 },
-  daegu:     { d: "M296,372 L328,367 L338,385 L327,400 L300,402 L288,387 Z", lx: 313, ly: 388, fs: 9 },
-  ulsan:     { d: "M366,393 L398,386 L409,413 L403,442 L377,448 L360,432 L358,412 Z", lx: 384, ly: 418, fs: 9 },
-  busan:     { d: "M342,457 L377,450 L400,462 L393,483 L360,492 L337,482 L334,464 Z", lx: 367, ly: 472, fs: 9 },
-  jeju:      { d: "M188,540 L242,534 L274,545 L272,566 L242,576 L194,568 L182,554 Z", lx: 228, ly: 557 },
+  gyeonggi: {
+    d: "M139,49 L193,49 L220,49 L259,68 L270,98 L258,127 L244,147 L224,166 L200,176 L169,176 L154,166 L147,147 L143,127 L147,98 L143,68 Z",
+    lx: 202, ly: 125,
+  },
+  seoul: {
+    d: "M177,110 L194,108 L207,112 L207,126 L200,135 L187,135 L177,133 Z",
+    lx: 192, ly: 122, fs: 9,
+  },
+  incheon: {
+    d: "M161,123 L171,126 L171,140 L158,151 L148,151 L144,146 L144,135 L148,126 Z",
+    lx: 157, ly: 138, fs: 9,
+  },
+  gangwon: {
+    d: "M216,20 L308,20 L339,35 L370,58 L378,93 L378,127 L366,152 L354,167 L339,167 L308,167 L270,167 L247,157 L247,127 L258,98 L258,68 L247,49 L231,29 Z",
+    lx: 315, ly: 100,
+  },
+  chungbuk: {
+    d: "M224,157 L247,157 L270,167 L293,176 L300,196 L293,215 L255,225 L220,225 L216,206 L216,176 Z",
+    lx: 258, ly: 196,
+  },
+  chungnam: {
+    d: "M216,167 L193,167 L170,167 L147,176 L143,206 L139,235 L124,255 L154,274 L185,264 L201,255 L212,225 L216,196 Z",
+    lx: 170, ly: 215,
+  },
+  daejeon: {
+    d: "M216,225 L235,227 L231,247 L220,253 L208,250 L208,237 Z",
+    lx: 220, ly: 240, fs: 9,
+  },
+  sejong: {
+    d: "M208,212 L220,212 L216,229 L205,232 L201,229 Z",
+    lx: 210, ly: 221, fs: 7,
+  },
+  jeonbuk: {
+    d: "M162,264 L185,264 L201,255 L231,274 L254,303 L254,323 L231,328 L193,328 L162,323 L154,303 L154,284 Z",
+    lx: 200, ly: 298,
+  },
+  jeonnam: {
+    d: "M254,323 L231,328 L193,328 L162,323 L154,342 L139,372 L131,401 L147,420 L170,440 L193,440 L216,420 L239,391 L254,372 L254,342 Z",
+    lx: 192, ly: 382,
+  },
+  gwangju: {
+    d: "M180,348 L192,345 L200,352 L198,362 L187,365 L178,358 Z",
+    lx: 189, ly: 356, fs: 9,
+  },
+  gyeongbuk: {
+    d: "M247,157 L270,167 L308,167 L354,167 L378,196 L378,235 L362,264 L347,294 L316,294 L285,294 L262,284 L254,274 L254,225 L254,196 Z",
+    lx: 322, ly: 225,
+  },
+  gyeongnam: {
+    d: "M262,284 L285,294 L316,294 L347,294 L370,323 L374,352 L362,372 L339,382 L308,382 L285,372 L262,372 L247,362 L239,343 L247,323 L254,303 Z",
+    lx: 312, ly: 338,
+  },
+  daegu: {
+    d: "M308,294 L325,292 L331,303 L320,313 L305,313 L298,303 Z",
+    lx: 315, ly: 303, fs: 9,
+  },
+  ulsan: {
+    d: "M347,294 L370,294 L374,323 L362,333 L347,323 L343,308 Z",
+    lx: 358, ly: 313, fs: 9,
+  },
+  busan: {
+    d: "M347,352 L370,343 L378,358 L370,372 L354,378 L339,372 L338,359 Z",
+    lx: 358, ly: 362, fs: 9,
+  },
+  jeju: {
+    d: "M147,503 L193,496 L239,494 L262,502 L258,520 L231,527 L185,527 L157,520 Z",
+    lx: 205, ly: 511,
+  },
 };
 
-// Provinces first, then cities drawn on top
 const DRAW_ORDER = [
   "gyeonggi", "gangwon", "chungbuk", "chungnam", "jeonbuk", "jeonnam", "gyeongbuk", "gyeongnam", "jeju",
   "seoul", "incheon", "daejeon", "sejong", "gwangju", "daegu", "ulsan", "busan",
@@ -63,10 +114,10 @@ function fillColor(lean: number): string {
   const t = Math.max(-60, Math.min(60, lean)) / 60;
   if (t < 0) {
     const r = -t;
-    return `rgb(${Math.round(210 - r * 106)},${Math.round(202 - r * 80)},${Math.round(190 - r * 20)})`;
+    return `rgb(${Math.round(210 - r * 106)},${Math.round(202 - r * 80)},${Math.round(192 - r * 20)})`;
   }
   const r = t;
-  return `rgb(${Math.round(210 - r * 22)},${Math.round(202 - r * 114)},${Math.round(190 - r * 120)})`;
+  return `rgb(${Math.round(210 - r * 22)},${Math.round(202 - r * 114)},${Math.round(192 - r * 120)})`;
 }
 
 function badgeBg(lean: number) {
@@ -116,14 +167,14 @@ export default function MapPage() {
         .logo:hover { opacity: 0.7; }
         .page { max-width: 1100px; margin: 0 auto; padding: 32px 48px 80px; }
         .ad-slot { width: 100%; display: flex; justify-content: center; margin: 0 0 28px; }
-        .page-title { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 700; color: var(--ink); margin-bottom: 28px; }
+        .page-title { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 700; color: var(--blue); margin-bottom: 28px; }
         .layout { display: flex; gap: 40px; align-items: flex-start; }
 
         .map-section { flex: 0 0 460px; }
         .map-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
-        .map-title { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; color: var(--ink); }
+        .map-title { font-family: 'Playfair Display', serif; font-size: 17px; font-weight: 700; color: var(--blue); }
         .map-count { font-size: 13px; color: var(--ink-muted); }
-        .map-count strong { font-size: 15px; font-weight: 700; color: var(--ink); }
+        .map-count strong { font-size: 15px; font-weight: 700; color: var(--blue); }
         .map-svg { width: 100%; display: block; }
         .rp { cursor: pointer; transition: opacity 0.12s; }
         .rp:hover { opacity: 0.78; }
@@ -131,7 +182,7 @@ export default function MapPage() {
         .legend-lbl { font-size: 12px; color: var(--ink-muted); white-space: nowrap; }
         .legend-bar {
           flex: 1; height: 8px; border-radius: 4px;
-          background: linear-gradient(to right, rgb(104,122,170), rgb(210,202,190), rgb(188,88,70));
+          background: linear-gradient(to right, rgb(104,122,170), rgb(210,202,192), rgb(188,88,72));
         }
 
         .detail-section { flex: 1; min-width: 0; padding-top: 38px; }
@@ -139,24 +190,16 @@ export default function MapPage() {
           background: var(--white); border-radius: 16px; padding: 28px 26px 24px;
           box-shadow: 0 2px 20px rgba(0,0,0,0.06); border: 1px solid var(--border);
         }
-        .d-name { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
+        .d-name { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 700; color: var(--blue); margin-bottom: 4px; }
         .d-participants { font-size: 13px; color: var(--ink-muted); margin-bottom: 16px; }
-        .d-participants strong { color: var(--ink); font-weight: 600; }
+        .d-participants strong { color: var(--blue); font-weight: 600; }
         .d-badge { padding: 10px 16px; border-radius: 24px; font-size: 15px; font-weight: 600; margin-bottom: 22px; text-align: center; }
-        .bars { display: flex; flex-direction: column; gap: 11px; margin-bottom: 20px; }
+        .bars { display: flex; flex-direction: column; gap: 11px; }
         .bar-row { display: flex; align-items: center; gap: 10px; }
         .bar-lbl { font-size: 13px; font-weight: 500; color: var(--ink); width: 28px; flex-shrink: 0; }
         .bar-bg { flex: 1; height: 10px; background: #ece8e2; border-radius: 6px; overflow: hidden; }
         .bar-fill { height: 100%; border-radius: 6px; transition: width 0.4s ease; }
         .bar-pct { font-size: 14px; font-weight: 600; color: var(--ink); width: 36px; text-align: right; flex-shrink: 0; }
-        .d-desc { font-size: 13px; color: var(--ink-muted); background: #f5f2ee; border-radius: 8px; padding: 12px 14px; margin-bottom: 16px; line-height: 1.55; }
-        .d-desc strong { color: var(--ink); }
-        .d-btn {
-          width: 100%; background: var(--blue); color: white; border: none;
-          border-radius: 10px; padding: 16px; font-size: 15px; font-weight: 600;
-          font-family: 'Inter', sans-serif; cursor: pointer; transition: background 0.15s;
-        }
-        .d-btn:hover { background: var(--blue-mid); }
 
         @media (max-width: 820px) {
           .header { padding: 16px 20px; }
@@ -191,7 +234,7 @@ export default function MapPage() {
               <span className="map-count">누적 참여자 <strong>{TOTAL.toLocaleString()}</strong>명</span>
             </div>
 
-            <svg viewBox="0 0 480 590" className="map-svg">
+            <svg viewBox="0 0 480 545" className="map-svg">
               {DRAW_ORDER.map(id => (
                 <path
                   key={id}
@@ -252,13 +295,6 @@ export default function MapPage() {
                   </div>
                 ))}
               </div>
-              <div className="d-desc">
-                <strong>{d.name}</strong>은 {d.dominant} 성향이 우세합니다.{" "}
-                다른 지역을 눌러 비교해보세요.
-              </div>
-              <button className="d-btn" onClick={() => router.push("/")}>
-                {d.label} 커뮤니티
-              </button>
             </div>
           </section>
         </div>
