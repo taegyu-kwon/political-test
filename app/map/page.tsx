@@ -18,96 +18,106 @@ const DATA: Record<string, RD> = {
   seoul:     { name: "서울특별시",     label: "서울",   participants: 18732, dominant: "중도",      lean:   0, scores: { far_left:  9, left: 24, center: 39, right: 20, far_right:  8 } },
   incheon:   { name: "인천광역시",     label: "인천",   participants:  7245, dominant: "중도",      lean:  -5, scores: { far_left:  8, left: 27, center: 38, right: 21, far_right:  6 } },
   gangwon:   { name: "강원도",        label: "강원",   participants:  5621, dominant: "중도 보수",  lean:  18, scores: { far_left:  5, left: 18, center: 37, right: 28, far_right: 12 } },
-  chungbuk:  { name: "충청북도",      label: "충청북", participants:  5234, dominant: "중도",      lean:  12, scores: { far_left:  6, left: 19, center: 38, right: 27, far_right: 10 } },
-  chungnam:  { name: "충청남도",      label: "충청남", participants:  6103, dominant: "중도",      lean:   8, scores: { far_left:  6, left: 21, center: 39, right: 25, far_right:  9 } },
+  chungbuk:  { name: "충청북도",      label: "충북",   participants:  5234, dominant: "중도",      lean:  12, scores: { far_left:  6, left: 19, center: 38, right: 27, far_right: 10 } },
+  chungnam:  { name: "충청남도",      label: "충남",   participants:  6103, dominant: "중도",      lean:   8, scores: { far_left:  6, left: 21, center: 39, right: 25, far_right:  9 } },
   daejeon:   { name: "대전광역시",     label: "대전",   participants:  5238, dominant: "중도",      lean:  -3, scores: { far_left:  8, left: 26, center: 39, right: 21, far_right:  6 } },
   sejong:    { name: "세종특별자치시", label: "세종",   participants:  1824, dominant: "중도",      lean:  -8, scores: { far_left:  9, left: 28, center: 37, right: 20, far_right:  6 } },
-  jeonbuk:   { name: "전라북도",      label: "전라북", participants:  5948, dominant: "진보",      lean: -32, scores: { far_left: 14, left: 32, center: 30, right: 17, far_right:  7 } },
-  jeonnam:   { name: "전라남도",      label: "전라남", participants:  4827, dominant: "진보",      lean: -42, scores: { far_left: 17, left: 35, center: 27, right: 15, far_right:  6 } },
+  jeonbuk:   { name: "전북특별자치도", label: "전북",   participants:  5948, dominant: "진보",      lean: -32, scores: { far_left: 14, left: 32, center: 30, right: 17, far_right:  7 } },
+  jeonnam:   { name: "전라남도",      label: "전남",   participants:  4827, dominant: "진보",      lean: -42, scores: { far_left: 17, left: 35, center: 27, right: 15, far_right:  6 } },
   gwangju:   { name: "광주광역시",     label: "광주",   participants:  4213, dominant: "진보",      lean: -48, scores: { far_left: 20, left: 36, center: 25, right: 14, far_right:  5 } },
-  gyeongbuk: { name: "경상북도",      label: "경상북", participants:  7934, dominant: "보수",      lean:  42, scores: { far_left:  4, left: 13, center: 27, right: 36, far_right: 20 } },
-  gyeongnam: { name: "경상남도",      label: "경상남", participants:  9128, dominant: "보수",      lean:  32, scores: { far_left:  5, left: 16, center: 30, right: 33, far_right: 16 } },
+  gyeongbuk: { name: "경상북도",      label: "경북",   participants:  7934, dominant: "보수",      lean:  42, scores: { far_left:  4, left: 13, center: 27, right: 36, far_right: 20 } },
+  gyeongnam: { name: "경상남도",      label: "경남",   participants:  9128, dominant: "보수",      lean:  32, scores: { far_left:  5, left: 16, center: 30, right: 33, far_right: 16 } },
   daegu:     { name: "대구광역시",     label: "대구",   participants:  6742, dominant: "보수",      lean:  45, scores: { far_left:  3, left: 11, center: 25, right: 37, far_right: 24 } },
   ulsan:     { name: "울산광역시",     label: "울산",   participants:  3891, dominant: "보수",      lean:  28, scores: { far_left:  5, left: 17, center: 31, right: 32, far_right: 15 } },
   busan:     { name: "부산광역시",     label: "부산",   participants:  8924, dominant: "중도 보수",  lean:  22, scores: { far_left:  5, left: 19, center: 33, right: 30, far_right: 13 } },
   jeju:      { name: "제주특별자치도", label: "제주",   participants:  2198, dominant: "중도",      lean: -12, scores: { far_left:  9, left: 26, center: 37, right: 21, far_right:  7 } },
 };
 
-// Coordinate system: x=(lon-124.5)*77, y=(38.8-lat)*98  viewBox="0 0 480 580"
+// South Korea — geographic province paths, viewBox="0 0 400 530"
+// Coordinate basis: lon 126°E→x≈30, 127°E→x≈138, 128°E→x≈246, 129°E→x≈354; lat 38.5°N→y≈20, 37°N→y≈152, 36°N→y≈260, 35°N→y≈368, 34°N→y≈476
 const PATHS: Record<string, { d: string; lx: number; ly: number; fs?: number }> = {
   gyeonggi: {
-    d: "M139,49 L193,49 L220,49 L259,68 L270,98 L258,127 L244,147 L224,166 L200,176 L169,176 L154,166 L147,147 L143,127 L147,98 L143,68 Z",
-    lx: 202, ly: 125,
+    d: "M 72,38 C 105,28 168,24 222,30 L 258,46 L 280,88 L 278,152 C 272,172 260,188 242,198 L 208,204 L 172,204 L 144,197 L 118,190 L 90,172 C 73,156 62,138 60,118 L 58,76 Z",
+    lx: 168, ly: 148,
   },
   seoul: {
-    d: "M177,110 L194,108 L207,112 L207,126 L200,135 L187,135 L177,133 Z",
-    lx: 192, ly: 122, fs: 9,
+    d: "M 146,88 L 176,84 L 186,98 L 182,120 L 164,126 L 144,122 L 136,108 Z",
+    lx: 162, ly: 106, fs: 9,
   },
   incheon: {
-    d: "M161,123 L171,126 L171,140 L158,151 L148,151 L144,146 L144,135 L148,126 Z",
-    lx: 157, ly: 138, fs: 9,
+    d: "M 64,114 L 84,104 L 98,118 L 94,142 L 78,152 L 62,148 L 56,130 Z",
+    lx: 77, ly: 130, fs: 9,
   },
   gangwon: {
-    d: "M216,20 L308,20 L339,35 L370,58 L378,93 L378,127 L366,152 L354,167 L339,167 L308,167 L270,167 L247,157 L247,127 L258,98 L258,68 L247,49 L231,29 Z",
-    lx: 315, ly: 100,
-  },
-  chungbuk: {
-    d: "M224,157 L247,157 L270,167 L293,176 L300,196 L293,215 L255,225 L220,225 L216,206 L216,176 Z",
-    lx: 258, ly: 196,
+    d: "M 222,30 L 316,22 L 344,40 L 360,80 L 364,148 L 348,186 L 318,204 L 286,206 C 270,205 258,196 244,192 L 262,164 C 272,140 278,108 270,82 L 258,48 Z",
+    lx: 310, ly: 122,
   },
   chungnam: {
-    d: "M216,167 L193,167 L170,167 L147,176 L143,206 L139,235 L124,255 L154,274 L185,264 L201,255 L212,225 L216,196 Z",
-    lx: 170, ly: 215,
-  },
-  daejeon: {
-    d: "M216,225 L235,227 L231,247 L220,253 L208,250 L208,237 Z",
-    lx: 220, ly: 240, fs: 9,
+    d: "M 58,200 L 90,174 L 120,192 L 142,200 L 160,230 C 156,252 150,272 140,298 L 115,320 L 88,324 C 68,318 50,298 46,276 L 44,250 Z",
+    lx: 102, ly: 262,
   },
   sejong: {
-    d: "M208,212 L220,212 L216,229 L205,232 L201,229 Z",
-    lx: 210, ly: 221, fs: 7,
+    d: "M 174,234 L 190,230 L 194,246 L 183,257 L 170,254 Z",
+    lx: 182, ly: 244, fs: 7,
+  },
+  chungbuk: {
+    d: "M 208,204 L 244,196 L 270,210 L 290,238 C 286,262 278,282 264,298 L 232,306 L 200,294 L 180,270 L 180,238 L 190,216 Z",
+    lx: 237, ly: 252,
+  },
+  daejeon: {
+    d: "M 164,274 L 182,270 L 186,286 L 178,300 L 161,297 L 153,282 Z",
+    lx: 170, ly: 286, fs: 9,
   },
   jeonbuk: {
-    d: "M162,264 L185,264 L201,255 L231,274 L254,303 L254,323 L231,328 L193,328 L162,323 L154,303 L154,284 Z",
-    lx: 200, ly: 298,
-  },
-  jeonnam: {
-    d: "M254,323 L231,328 L193,328 L162,323 L154,342 L139,372 L131,401 L147,420 L170,440 L193,440 L216,420 L239,391 L254,372 L254,342 Z",
-    lx: 192, ly: 382,
-  },
-  gwangju: {
-    d: "M180,348 L192,345 L200,352 L198,362 L187,365 L178,358 Z",
-    lx: 189, ly: 356, fs: 9,
+    d: "M 120,328 L 150,314 L 184,306 L 218,312 L 240,334 C 241,354 236,372 218,390 L 178,396 L 136,392 L 108,372 Z",
+    lx: 176, ly: 356,
   },
   gyeongbuk: {
-    d: "M247,157 L270,167 L308,167 L354,167 L378,196 L378,235 L362,264 L347,294 L316,294 L285,294 L262,284 L254,274 L254,225 L254,196 Z",
-    lx: 322, ly: 225,
-  },
-  gyeongnam: {
-    d: "M262,284 L285,294 L316,294 L347,294 L370,323 L374,352 L362,372 L339,382 L308,382 L285,372 L262,372 L247,362 L239,343 L247,323 L254,303 Z",
-    lx: 312, ly: 338,
+    d: "M 270,212 L 320,208 L 352,228 L 366,272 L 360,322 L 336,356 L 302,366 L 270,356 L 250,326 L 248,288 C 252,270 260,252 266,238 Z",
+    lx: 312, ly: 286,
   },
   daegu: {
-    d: "M308,294 L325,292 L331,303 L320,313 L305,313 L298,303 Z",
-    lx: 315, ly: 303, fs: 9,
+    d: "M 294,282 L 324,278 L 334,296 L 322,316 L 296,316 L 284,300 Z",
+    lx: 309, ly: 299, fs: 9,
+  },
+  jeonnam: {
+    d: "M 108,376 L 136,396 L 178,400 L 218,393 L 236,416 C 228,442 216,460 194,468 L 156,474 L 116,467 L 88,442 L 78,410 Z",
+    lx: 158, ly: 434,
+  },
+  gwangju: {
+    d: "M 162,398 L 184,394 L 192,410 L 184,425 L 162,425 L 152,410 Z",
+    lx: 172, ly: 412, fs: 9,
+  },
+  gyeongnam: {
+    d: "M 240,338 L 272,360 L 304,368 L 336,358 L 360,380 C 362,404 355,424 333,436 L 296,444 L 257,436 L 232,418 L 222,392 Z",
+    lx: 296, ly: 406,
   },
   ulsan: {
-    d: "M347,294 L370,294 L374,323 L362,333 L347,323 L343,308 Z",
-    lx: 358, ly: 313, fs: 9,
+    d: "M 348,322 L 372,312 L 378,342 L 366,366 L 344,368 L 332,354 Z",
+    lx: 356, ly: 342, fs: 9,
   },
   busan: {
-    d: "M347,352 L370,343 L378,358 L370,372 L354,378 L339,372 L338,359 Z",
-    lx: 358, ly: 362, fs: 9,
+    d: "M 336,416 L 360,406 L 374,422 L 367,442 L 342,448 L 326,436 Z",
+    lx: 350, ly: 430, fs: 9,
   },
   jeju: {
-    d: "M147,503 L193,496 L239,494 L262,502 L258,520 L231,527 L185,527 L157,520 Z",
-    lx: 205, ly: 511,
+    d: "M 105,478 L 162,470 L 216,470 L 248,480 L 240,496 L 196,504 L 148,504 L 110,496 Z",
+    lx: 178, ly: 487,
   },
 };
 
 const DRAW_ORDER = [
   "gyeonggi", "gangwon", "chungbuk", "chungnam", "jeonbuk", "jeonnam", "gyeongbuk", "gyeongnam", "jeju",
   "seoul", "incheon", "daejeon", "sejong", "gwangju", "daegu", "ulsan", "busan",
+];
+
+const REGION_LIST = [
+  ["seoul","incheon","gyeonggi"],
+  ["gangwon"],
+  ["chungnam","sejong","chungbuk","daejeon"],
+  ["jeonbuk","jeonnam","gwangju"],
+  ["gyeongbuk","daegu","gyeongnam","ulsan","busan"],
+  ["jeju"],
 ];
 
 function fillColor(lean: number): string {
@@ -170,20 +180,30 @@ export default function MapPage() {
         .page-title { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 700; color: var(--blue); margin-bottom: 28px; }
         .layout { display: flex; gap: 40px; align-items: flex-start; }
 
-        .map-section { flex: 0 0 460px; }
+        .map-section { flex: 0 0 420px; }
         .map-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
         .map-title { font-family: 'Playfair Display', serif; font-size: 17px; font-weight: 700; color: var(--blue); }
         .map-count { font-size: 13px; color: var(--ink-muted); }
         .map-count strong { font-size: 15px; font-weight: 700; color: var(--blue); }
         .map-svg { width: 100%; display: block; }
         .rp { cursor: pointer; transition: opacity 0.12s; }
-        .rp:hover { opacity: 0.78; }
+        .rp:hover { opacity: 0.75; }
         .legend { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
         .legend-lbl { font-size: 12px; color: var(--ink-muted); white-space: nowrap; }
         .legend-bar {
           flex: 1; height: 8px; border-radius: 4px;
           background: linear-gradient(to right, rgb(104,122,170), rgb(210,202,192), rgb(188,88,72));
         }
+
+        .region-grid { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 16px; }
+        .region-btn {
+          font-size: 12px; font-weight: 600; padding: 5px 12px;
+          border-radius: 16px; border: 1.5px solid var(--border);
+          background: var(--white); color: var(--ink-muted);
+          cursor: pointer; transition: all 0.12s;
+        }
+        .region-btn:hover { border-color: var(--blue); color: var(--blue); }
+        .region-btn.active { border-color: var(--blue); background: #e8eef8; color: var(--blue); }
 
         .detail-section { flex: 1; min-width: 0; padding-top: 38px; }
         .detail-card {
@@ -234,18 +254,20 @@ export default function MapPage() {
               <span className="map-count">누적 참여자 <strong>{TOTAL.toLocaleString()}</strong>명</span>
             </div>
 
-            <svg viewBox="0 0 480 545" className="map-svg">
+            <svg viewBox="0 0 400 530" className="map-svg">
               {DRAW_ORDER.map(id => (
                 <path
                   key={id}
                   d={PATHS[id].d}
                   fill={fillColor(DATA[id].lean)}
                   stroke="white"
-                  strokeWidth={sel === id ? "2.8" : "1.5"}
+                  strokeWidth={sel === id ? "3" : "1.5"}
                   strokeLinejoin="round"
                   className="rp"
                   onClick={() => setSel(id)}
-                  style={{ filter: sel === id ? "drop-shadow(0 0 3px rgba(0,0,0,0.22))" : undefined }}
+                  style={{
+                    filter: sel === id ? "drop-shadow(0 0 4px rgba(0,0,0,0.28))" : undefined,
+                  }}
                 >
                   <title>{DATA[id].name}</title>
                 </path>
@@ -271,6 +293,18 @@ export default function MapPage() {
               <span className="legend-lbl">진보 우세</span>
               <div className="legend-bar" />
               <span className="legend-lbl">보수 우세</span>
+            </div>
+
+            <div className="region-grid">
+              {Object.keys(DATA).map(id => (
+                <button
+                  key={id}
+                  className={`region-btn${sel === id ? " active" : ""}`}
+                  onClick={() => setSel(id)}
+                >
+                  {DATA[id].label}
+                </button>
+              ))}
             </div>
           </section>
 
