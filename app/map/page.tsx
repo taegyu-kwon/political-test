@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
+import { supabase } from "@/lib/supabase";
 
 type SK = "far_left" | "left" | "center" | "right" | "far_right";
 interface RD {
@@ -13,24 +14,40 @@ interface RD {
   scores: Record<SK, number>;
 }
 
-const DATA: Record<string, RD> = {
-  gyeonggi:  { name: "경기도",        label: "경기",   participants: 31842, dominant: "중도",      lean:   3, scores: { far_left:  7, left: 24, center: 40, right: 22, far_right:  7 } },
-  seoul:     { name: "서울특별시",     label: "서울",   participants: 18732, dominant: "중도",      lean:   0, scores: { far_left:  9, left: 24, center: 39, right: 20, far_right:  8 } },
-  incheon:   { name: "인천광역시",     label: "인천",   participants:  7245, dominant: "중도",      lean:  -5, scores: { far_left:  8, left: 27, center: 38, right: 21, far_right:  6 } },
-  gangwon:   { name: "강원도",        label: "강원",   participants:  5621, dominant: "중도 보수",  lean:  18, scores: { far_left:  5, left: 18, center: 37, right: 28, far_right: 12 } },
-  chungbuk:  { name: "충청북도",      label: "충북",   participants:  5234, dominant: "중도",      lean:  12, scores: { far_left:  6, left: 19, center: 38, right: 27, far_right: 10 } },
-  chungnam:  { name: "충청남도",      label: "충남",   participants:  6103, dominant: "중도",      lean:   8, scores: { far_left:  6, left: 21, center: 39, right: 25, far_right:  9 } },
-  daejeon:   { name: "대전광역시",     label: "대전",   participants:  5238, dominant: "중도",      lean:  -3, scores: { far_left:  8, left: 26, center: 39, right: 21, far_right:  6 } },
-  sejong:    { name: "세종특별자치시", label: "세종",   participants:  1824, dominant: "중도",      lean:  -8, scores: { far_left:  9, left: 28, center: 37, right: 20, far_right:  6 } },
-  jeonbuk:   { name: "전북특별자치도", label: "전북",   participants:  5948, dominant: "진보",      lean: -32, scores: { far_left: 14, left: 32, center: 30, right: 17, far_right:  7 } },
-  jeonnam:   { name: "전라남도",      label: "전남",   participants:  4827, dominant: "진보",      lean: -42, scores: { far_left: 17, left: 35, center: 27, right: 15, far_right:  6 } },
-  gwangju:   { name: "광주광역시",     label: "광주",   participants:  4213, dominant: "진보",      lean: -48, scores: { far_left: 20, left: 36, center: 25, right: 14, far_right:  5 } },
-  gyeongbuk: { name: "경상북도",      label: "경북",   participants:  7934, dominant: "보수",      lean:  42, scores: { far_left:  4, left: 13, center: 27, right: 36, far_right: 20 } },
-  gyeongnam: { name: "경상남도",      label: "경남",   participants:  9128, dominant: "보수",      lean:  32, scores: { far_left:  5, left: 16, center: 30, right: 33, far_right: 16 } },
-  daegu:     { name: "대구광역시",     label: "대구",   participants:  6742, dominant: "보수",      lean:  45, scores: { far_left:  3, left: 11, center: 25, right: 37, far_right: 24 } },
-  ulsan:     { name: "울산광역시",     label: "울산",   participants:  3891, dominant: "보수",      lean:  28, scores: { far_left:  5, left: 17, center: 31, right: 32, far_right: 15 } },
-  busan:     { name: "부산광역시",     label: "부산",   participants:  8924, dominant: "중도 보수",  lean:  22, scores: { far_left:  5, left: 19, center: 33, right: 30, far_right: 13 } },
-  jeju:      { name: "제주특별자치도", label: "제주",   participants:  2198, dominant: "중도",      lean: -12, scores: { far_left:  9, left: 26, center: 37, right: 21, far_right:  7 } },
+const REGIONS: Record<string, { name: string; label: string }> = {
+  gyeonggi:  { name: "경기도",        label: "경기" },
+  seoul:     { name: "서울특별시",     label: "서울" },
+  incheon:   { name: "인천광역시",     label: "인천" },
+  gangwon:   { name: "강원도",        label: "강원" },
+  chungbuk:  { name: "충청북도",      label: "충북" },
+  chungnam:  { name: "충청남도",      label: "충남" },
+  daejeon:   { name: "대전광역시",     label: "대전" },
+  sejong:    { name: "세종특별자치시", label: "세종" },
+  jeonbuk:   { name: "전북특별자치도", label: "전북" },
+  jeonnam:   { name: "전라남도",      label: "전남" },
+  gwangju:   { name: "광주광역시",     label: "광주" },
+  gyeongbuk: { name: "경상북도",      label: "경북" },
+  gyeongnam: { name: "경상남도",      label: "경남" },
+  daegu:     { name: "대구광역시",     label: "대구" },
+  ulsan:     { name: "울산광역시",     label: "울산" },
+  busan:     { name: "부산광역시",     label: "부산" },
+  jeju:      { name: "제주특별자치도", label: "제주" },
+};
+
+const LABEL_TO_ID: Record<string, string> = Object.fromEntries(
+  Object.entries(REGIONS).map(([id, r]) => [r.label, id])
+);
+
+const RESULT_TO_SK: Record<string, SK> = {
+  "극좌": "far_left",
+  "진보": "left",
+  "중도": "center",
+  "보수": "right",
+  "극우": "far_right",
+};
+
+const EMPTY_SCORES: Record<SK, number> = {
+  far_left: 0, left: 0, center: 0, right: 0, far_right: 0,
 };
 
 const PATHS: Record<string, { d: string; lx: number; ly: number; fs?: number }> = {
@@ -109,6 +126,106 @@ const DRAW_ORDER = [
   "seoul", "incheon", "daejeon", "sejong", "gwangju", "daegu", "ulsan", "busan",
 ];
 
+function emptyData(): Record<string, RD> {
+  return Object.fromEntries(
+    Object.entries(REGIONS).map(([id, r]) => [
+      id,
+      {
+        name: r.name,
+        label: r.label,
+        participants: 0,
+        dominant: "데이터 없음",
+        lean: 0,
+        scores: { ...EMPTY_SCORES },
+      },
+    ])
+  );
+}
+
+function dominantFrom(scores: Record<SK, number>): string {
+  const prog = scores.far_left + scores.left;
+  const cons = scores.right + scores.far_right;
+  const cen = scores.center;
+  if (cen >= prog && cen >= cons) {
+    if (cons >= prog + 8) return "중도 보수";
+    if (prog >= cons + 8) return "중도 진보";
+    return "중도";
+  }
+  if (prog > cons) return scores.far_left >= scores.left ? "극좌" : "진보";
+  return scores.far_right >= scores.right ? "극우" : "보수";
+}
+
+function leanFrom(scores: Record<SK, number>): number {
+  return (
+    scores.far_left * -50 +
+    scores.left * -25 +
+    scores.center * 0 +
+    scores.right * 25 +
+    scores.far_right * 50
+  ) / 100;
+}
+
+function aggregate(rows: { region: string | null; result: string | null }[]): Record<string, RD> {
+  const counts: Record<string, Record<SK, number>> = {};
+  for (const id of Object.keys(REGIONS)) {
+    counts[id] = { far_left: 0, left: 0, center: 0, right: 0, far_right: 0 };
+  }
+
+  for (const row of rows) {
+    if (!row.region || !row.result) continue;
+    const id = LABEL_TO_ID[row.region];
+    const sk = RESULT_TO_SK[row.result];
+    if (!id || !sk) continue;
+    counts[id][sk] += 1;
+  }
+
+  const out = emptyData();
+  for (const id of Object.keys(REGIONS)) {
+    const c = counts[id];
+    const total = c.far_left + c.left + c.center + c.right + c.far_right;
+    if (total === 0) continue;
+    const scores: Record<SK, number> = {
+      far_left: Math.round((c.far_left / total) * 100),
+      left: Math.round((c.left / total) * 100),
+      center: Math.round((c.center / total) * 100),
+      right: Math.round((c.right / total) * 100),
+      far_right: Math.round((c.far_right / total) * 100),
+    };
+    // Fix rounding drift so bars sum to 100
+    const drift = 100 - (scores.far_left + scores.left + scores.center + scores.right + scores.far_right);
+    if (drift !== 0) {
+      const key = (Object.keys(scores) as SK[]).sort((a, b) => scores[b] - scores[a])[0];
+      scores[key] += drift;
+    }
+    out[id] = {
+      name: REGIONS[id].name,
+      label: REGIONS[id].label,
+      participants: total,
+      dominant: dominantFrom(scores),
+      lean: leanFrom(scores),
+      scores,
+    };
+  }
+  return out;
+}
+
+async function fetchAllResponses() {
+  const pageSize = 1000;
+  let from = 0;
+  const all: { region: string | null; result: string | null }[] = [];
+  while (true) {
+    const { data, error } = await supabase
+      .from("responses")
+      .select("region, result")
+      .range(from, from + pageSize - 1);
+    if (error) throw error;
+    if (!data?.length) break;
+    all.push(...data);
+    if (data.length < pageSize) break;
+    from += pageSize;
+  }
+  return all;
+}
 
 function fillColor(lean: number): string {
   const t = Math.max(-60, Math.min(60, lean)) / 60;
@@ -139,12 +256,43 @@ const CATS: { key: SK; label: string; color: string }[] = [
   { key: "far_right", label: "극우", color: "#8b2525" },
 ];
 
-const TOTAL = 142318;
-
 export default function MapPage() {
   const router = useRouter();
   const [sel, setSel] = useState("seoul");
-  const d = DATA[sel];
+  const [data, setData] = useState<Record<string, RD>>(emptyData);
+  const [loading, setLoading] = useState(true);
+
+  const reload = async () => {
+    try {
+      const rows = await fetchAllResponses();
+      setData(aggregate(rows));
+    } catch (e) {
+      console.error("Failed to load map stats:", e);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    reload();
+    const channel = supabase
+      .channel("map-responses")
+      .on(
+        "postgres_changes",
+        { event: "INSERT", schema: "public", table: "responses" },
+        () => { reload(); }
+      )
+      .subscribe();
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, []);
+
+  const total = useMemo(
+    () => Object.values(data).reduce((sum, r) => sum + r.participants, 0),
+    [data]
+  );
+  const d = data[sel];
 
   return (
     <>
@@ -165,17 +313,17 @@ export default function MapPage() {
         }
         .logo { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; color: var(--blue); cursor: pointer; transition: opacity 0.15s; }
         .logo:hover { opacity: 0.7; }
-        .page { max-width: 1100px; margin: 0 auto; padding: 32px 48px 80px; }
+        .page { max-width: 520px; margin: 0 auto; padding: 32px 48px 80px; }
         .ad-slot { width: 100%; display: flex; justify-content: center; margin: 0 0 28px; }
         .page-title { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 700; color: var(--blue); margin-bottom: 28px; }
-        .layout { display: flex; gap: 40px; align-items: flex-start; }
+        .layout { display: flex; flex-direction: column; gap: 28px; align-items: stretch; }
 
-        .map-section { flex: 0 0 420px; }
-        .map-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
+        .map-section { width: 100%; }
+        .map-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; gap: 12px; }
         .map-title { font-family: 'Playfair Display', serif; font-size: 17px; font-weight: 700; color: var(--blue); }
         .map-count { font-size: 13px; color: var(--ink-muted); }
         .map-count strong { font-size: 15px; font-weight: 700; color: var(--blue); }
-        .map-svg { width: 100%; display: block; }
+        .map-svg { width: 100%; max-width: 420px; margin: 0 auto; display: block; }
         .rp { cursor: pointer; transition: opacity 0.12s; }
         .rp:hover { opacity: 0.75; }
         .legend { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
@@ -185,8 +333,7 @@ export default function MapPage() {
           background: linear-gradient(to right, rgb(104,122,170), rgb(210,202,192), rgb(188,88,72));
         }
 
-
-        .detail-section { flex: 1; min-width: 0; padding-top: 38px; }
+        .detail-section { width: 100%; }
         .detail-card {
           background: var(--white); border-radius: 16px; padding: 28px 26px 24px;
           box-shadow: 0 2px 20px rgba(0,0,0,0.06); border: 1px solid var(--border);
@@ -205,9 +352,8 @@ export default function MapPage() {
         @media (max-width: 820px) {
           .header { padding: 16px 20px; }
           .page { padding: 20px 20px 60px; }
-          .layout { flex-direction: column; gap: 24px; }
-          .map-section { flex: none; width: 100%; }
-          .detail-section { padding-top: 0; width: 100%; }
+        }
+          .page { padding: 20px 20px 60px; }
         }
       `}</style>
 
@@ -232,7 +378,9 @@ export default function MapPage() {
           <section className="map-section">
             <div className="map-top">
               <span className="map-title">지역별 정치성향 분포</span>
-              <span className="map-count">누적 참여자 <strong>{TOTAL.toLocaleString()}</strong>명</span>
+              <span className="map-count">
+                누적 참여자 <strong>{loading ? "…" : total.toLocaleString()}</strong>명
+              </span>
             </div>
 
             <svg viewBox="0 0 400 580" className="map-svg">
@@ -240,7 +388,7 @@ export default function MapPage() {
                 <path
                   key={id}
                   d={PATHS[id].d}
-                  fill={fillColor(DATA[id].lean)}
+                  fill={data[id].participants ? fillColor(data[id].lean) : "#e8e4dc"}
                   fillRule="evenodd"
                   stroke="white"
                   strokeWidth={sel === id ? "2.5" : "1"}
@@ -251,23 +399,8 @@ export default function MapPage() {
                     filter: sel === id ? "drop-shadow(0 0 4px rgba(0,0,0,0.28))" : undefined,
                   }}
                 >
-                  <title>{DATA[id].name}</title>
+                  <title>{data[id].name}</title>
                 </path>
-              ))}
-              {DRAW_ORDER.map(id => (
-                <text
-                  key={`t-${id}`}
-                  x={PATHS[id].lx}
-                  y={PATHS[id].ly}
-                  textAnchor="middle"
-                  dominantBaseline="middle"
-                  fill="white"
-                  fontSize={PATHS[id].fs ?? 11}
-                  fontWeight="600"
-                  style={{ pointerEvents: "none", userSelect: "none" }}
-                >
-                  {DATA[id].label}
-                </text>
               ))}
             </svg>
 
@@ -276,18 +409,19 @@ export default function MapPage() {
               <div className="legend-bar" />
               <span className="legend-lbl">보수 우세</span>
             </div>
-
           </section>
 
           <section className="detail-section">
             <div className="detail-card">
               <h2 className="d-name">{d.name}</h2>
-              <p className="d-participants">응답자 <strong>{d.participants.toLocaleString()}</strong>명 참여</p>
+              <p className="d-participants">
+                응답자 <strong>{d.participants.toLocaleString()}</strong>명 참여
+              </p>
               <div
                 className="d-badge"
                 style={{ background: badgeBg(d.lean), color: badgeColor(d.lean) }}
               >
-                {d.dominant} 우세
+                {d.participants ? `${d.dominant} 우세` : "아직 데이터가 없습니다"}
               </div>
               <div className="bars">
                 {CATS.map(cat => (
