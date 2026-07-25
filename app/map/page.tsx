@@ -188,32 +188,29 @@ function leanFrom(scores: Record<SK, number>): number {
   ) / 100;
 }
 
-function aggregate(rows: { region: string | null; result: string | null }[]): Record<string, RD> {
-  const counts: Record<string, Record<SK, number>> = {};
-  for (const id of Object.keys(REGIONS)) {
-    counts[id] = { far_left: 0, left: 0, center: 0, right: 0, far_right: 0 };
-  }
-
-  for (const row of rows) {
-    if (!row.region || !row.result) continue;
-    const id = LABEL_TO_ID[row.region];
-    const sk = RESULT_TO_SK[row.result];
-    if (!id || !sk) continue;
-    counts[id][sk] += 1;
-  }
-
+function buildFromCounts(counts: Record<string, Record<SK, number>>): Record<string, RD> {
   const liveTotal = Object.values(counts).reduce(
     (sum, c) => sum + c.far_left + c.left + c.center + c.right + c.far_right,
     0
   );
-  // DB에 누적 응답이 없으면 기존 시드 통계를 그대로 사용
+  // anon 읽기가 막혀 있으면 기존 시드로 폴백
   if (liveTotal === 0) return seedData();
 
-  const out = seedData();
+  const out: Record<string, RD> = {};
   for (const id of Object.keys(REGIONS)) {
-    const c = counts[id];
+    const c = counts[id] ?? { ...EMPTY_SCORES };
     const total = c.far_left + c.left + c.center + c.right + c.far_right;
-    if (total === 0) continue;
+    if (total === 0) {
+      out[id] = {
+        name: REGIONS[id].name,
+        label: REGIONS[id].label,
+        participants: 0,
+        dominant: "데이터 없음",
+        lean: 0,
+        scores: { ...EMPTY_SCORES },
+      };
+      continue;
+    }
     const scores: Record<SK, number> = {
       far_left: Math.round((c.far_left / total) * 100),
       left: Math.round((c.left / total) * 100),
@@ -238,7 +235,31 @@ function aggregate(rows: { region: string | null; result: string | null }[]): Re
   return out;
 }
 
-async function fetchAllResponses() {
+function aggregateRows(rows: { region: string | null; result: string | null; cnt?: number | null }[]): Record<string, RD> {
+  const counts: Record<string, Record<SK, number>> = {};
+  for (const id of Object.keys(REGIONS)) {
+    counts[id] = { far_left: 0, left: 0, center: 0, right: 0, far_right: 0 };
+  }
+
+  for (const row of rows) {
+    if (!row.region || !row.result) continue;
+    const id = LABEL_TO_ID[row.region];
+    const sk = RESULT_TO_SK[row.result];
+    if (!id || !sk) continue;
+    counts[id][sk] += row.cnt ?? 1;
+  }
+
+  return buildFromCounts(counts);
+}
+
+async function fetchMapStats(): Promise<Record<string, RD>> {
+  // 1) Prefer server-side aggregate RPC (works even with tight RLS if SECURITY DEFINER)
+  const rpc = await supabase.rpc("map_region_stats");
+  if (!rpc.error && rpc.data) {
+    return aggregateRows(rpc.data as { region: string | null; result: string | null; cnt: number }[]);
+  }
+
+  // 2) Fallback: direct select (needs SELECT policy)
   const pageSize = 1000;
   let from = 0;
   const all: { region: string | null; result: string | null }[] = [];
@@ -253,7 +274,7 @@ async function fetchAllResponses() {
     if (data.length < pageSize) break;
     from += pageSize;
   }
-  return all;
+  return aggregateRows(all);
 }
 
 function fillColor(lean: number): string {
@@ -293,8 +314,7 @@ export default function MapPage() {
 
   const reload = async () => {
     try {
-      const rows = await fetchAllResponses();
-      setData(aggregate(rows));
+      setData(await fetchMapStats());
     } catch (e) {
       console.error("Failed to load map stats:", e);
     } finally {
