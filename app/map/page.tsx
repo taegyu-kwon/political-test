@@ -405,6 +405,7 @@ export default function MapPage() {
           font-size: 11px;
           line-height: 1.55;
           color: var(--ink-muted);
+          text-align: center;
         }
 
         @media (max-width: 820px) {
