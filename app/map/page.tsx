@@ -278,13 +278,15 @@ async function fetchMapStats(): Promise<Record<string, RD>> {
 }
 
 function fillColor(lean: number): string {
+  // -60 = deep blue, 0 = light gray, +60 = deep red
   const t = Math.max(-60, Math.min(60, lean)) / 60;
   if (t < 0) {
-    const r = -t;
-    return `rgb(${Math.round(210 - r * 106)},${Math.round(202 - r * 80)},${Math.round(192 - r * 20)})`;
+    const r = -t; // progressive
+    return `rgb(${Math.round(170 - r * 130)},${Math.round(190 - r * 90)},${Math.round(220 - r * 20)})`;
   }
-  const r = t;
-  return `rgb(${Math.round(210 - r * 22)},${Math.round(202 - r * 114)},${Math.round(192 - r * 120)})`;
+  if (t === 0) return "rgb(210, 212, 216)";
+  const r = t; // conservative
+  return `rgb(${Math.round(200 + r * 40)},${Math.round(190 - r * 145)},${Math.round(195 - r * 150)})`;
 }
 
 function badgeBg(lean: number) {
@@ -379,7 +381,7 @@ export default function MapPage() {
         .legend-lbl { font-size: 12px; color: var(--ink-muted); white-space: nowrap; }
         .legend-bar {
           flex: 1; height: 8px; border-radius: 4px;
-          background: linear-gradient(to right, rgb(104,122,170), rgb(210,202,192), rgb(188,88,72));
+          background: linear-gradient(to right, rgb(40,100,200), rgb(210,212,216), rgb(200,45,45));
         }
 
         .detail-section { width: 100%; }
