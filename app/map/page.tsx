@@ -374,10 +374,10 @@ export default function MapPage() {
         .map-title { font-family: 'Playfair Display', serif; font-size: 17px; font-weight: 700; color: var(--blue); }
         .map-count { font-size: 13px; color: var(--ink-muted); }
         .map-count strong { font-size: 15px; font-weight: 700; color: var(--blue); }
-        .map-svg { width: 100%; max-width: 420px; margin: 0 auto; display: block; }
+        .map-svg { width: 100%; max-width: 420px; margin: 0 auto -4px; display: block; }
         .rp { cursor: pointer; transition: opacity 0.12s; }
         .rp:hover { opacity: 0.75; }
-        .legend { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
+        .legend { display: flex; align-items: center; gap: 10px; margin-top: 2px; }
         .legend-lbl { font-size: 12px; color: var(--ink-muted); white-space: nowrap; }
         .legend-bar {
           flex: 1; height: 8px; border-radius: 4px;
@@ -400,10 +400,15 @@ export default function MapPage() {
         .bar-fill { height: 100%; border-radius: 6px; transition: width 0.4s ease; }
         .bar-pct { font-size: 14px; font-weight: 600; color: var(--ink); width: 36px; text-align: right; flex-shrink: 0; }
 
+        .footnote {
+          margin-top: 28px;
+          font-size: 11px;
+          line-height: 1.55;
+          color: var(--ink-muted);
+        }
+
         @media (max-width: 820px) {
           .header { padding: 16px 20px; }
-          .page { padding: 20px 20px 60px; }
-        }
           .page { padding: 20px 20px 60px; }
         }
       `}</style>
@@ -434,7 +439,7 @@ export default function MapPage() {
               </span>
             </div>
 
-            <svg viewBox="0 0 400 580" className="map-svg">
+            <svg viewBox="0 0 400 505" className="map-svg">
               {DRAW_ORDER.map(id => (
                 <path
                   key={id}
@@ -488,6 +493,10 @@ export default function MapPage() {
             </div>
           </section>
         </div>
+
+        <p className="footnote">
+          ※ ‘극좌·극우’는 절대적인 이념 규정어가 아니라, 진보·보수와 구분하기 위한 표현입니다.
+        </p>
       </div>
     </>
   );
