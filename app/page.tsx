@@ -181,7 +181,7 @@ export default function Home() {
           border: 1px solid var(--border);
           border-radius: 12px;
           padding: 30px 36px;
-          margin-bottom: 16px;
+          margin-bottom: 56px;
           display: flex;
           flex-direction: column;
           gap: 18px;
@@ -229,7 +229,8 @@ export default function Home() {
           cursor: pointer;
           transition: box-shadow 0.15s, transform 0.15s;
           text-decoration: none;
-          margin-bottom: 56px;
+          margin: 0;
+          width: 100%;
         }
         .map-card:hover { box-shadow: 0 6px 24px rgba(26,58,110,0.1); transform: translateY(-2px); }
         .map-card-left {}
@@ -315,8 +316,8 @@ export default function Home() {
           .stat:nth-child(2) { border-right: none; }
           .stat:nth-child(3) { border-top: 1px solid var(--border); }
           .stat:nth-child(4) { border-top: 1px solid var(--border); }
-          .parts-card { margin-bottom: 16px; }
-          .map-card { margin-bottom: 32px; }
+          .parts-card { margin-bottom: 32px; }
+          .map-card { margin-bottom: 0; }
           .footer {
             padding: 24px 0 40px;
             flex-direction: column;
@@ -369,6 +370,15 @@ export default function Home() {
             </button>
             <span className="cta-meta">약 10분 · 40문항</span>
           </div>
+
+          <div className={`map-card ${mounted ? "f5" : ""}`} onClick={() => router.push("/map")}>
+            <div className="map-card-left">
+              <p className="map-card-badge">New · 정치판세맵</p>
+              <p className="map-card-title">지역별 정치성향 분포</p>
+              <p className="map-card-desc">우리 지역은 진보? 보수? 지도로 한눈에 확인하세요.</p>
+            </div>
+            <span className="map-card-arrow">→</span>
+          </div>
         </main>
 
         <div className={mounted ? "f5" : ""}>
@@ -412,14 +422,6 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="map-card" onClick={() => router.push("/map")}>
-          <div className="map-card-left">
-            <p className="map-card-badge">New · 정치판세맵</p>
-            <p className="map-card-title">지역별 정치성향 분포</p>
-            <p className="map-card-desc">우리 지역은 진보? 보수? 지도로 한눈에 확인하세요.</p>
-          </div>
-          <span className="map-card-arrow">→</span>
-        </div>
 
         <footer className="footer">
           <div className="footer-left">
