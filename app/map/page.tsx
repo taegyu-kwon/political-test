@@ -374,7 +374,7 @@ export default function MapPage() {
         .map-title { font-family: 'Playfair Display', serif; font-size: 17px; font-weight: 700; color: var(--blue); }
         .map-count { font-size: 13px; color: var(--ink-muted); }
         .map-count strong { font-size: 15px; font-weight: 700; color: var(--blue); }
-        .map-svg { width: 100%; max-width: 420px; margin: -2px auto -4px; display: block; }
+        .map-svg { width: 100%; max-width: 420px; margin: 10px auto -4px; display: block; }
         .rp { cursor: pointer; transition: opacity 0.12s; }
         .rp:hover { opacity: 0.75; }
         .legend { display: flex; align-items: center; gap: 10px; margin-top: 2px; }
@@ -440,7 +440,7 @@ export default function MapPage() {
               </span>
             </div>
 
-            <svg viewBox="0 76 400 426" className="map-svg">
+            <svg viewBox="0 70 400 432" className="map-svg">
               {DRAW_ORDER.map(id => (
                 <path
                   key={id}
