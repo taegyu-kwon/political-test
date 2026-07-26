@@ -73,7 +73,7 @@ export default function Home() {
           display: flex;
           flex-direction: column;
           justify-content: center;
-          padding: 96px 0 64px;
+          padding: 96px 0 28px;
           gap: 28px;
         }
 
