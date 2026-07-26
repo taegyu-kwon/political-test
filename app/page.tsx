@@ -69,11 +69,10 @@ export default function Home() {
         }
 
         .hero {
-          flex: 1;
           display: flex;
           flex-direction: column;
           justify-content: center;
-          padding: 96px 0 28px;
+          padding: 96px 0 0;
           gap: 28px;
         }
 
@@ -229,7 +228,7 @@ export default function Home() {
           cursor: pointer;
           transition: box-shadow 0.15s, transform 0.15s;
           text-decoration: none;
-          margin: 0;
+          margin: 28px 0;
           width: 100%;
         }
         .map-card:hover { box-shadow: 0 6px 24px rgba(26,58,110,0.1); transform: translateY(-2px); }
@@ -317,7 +316,7 @@ export default function Home() {
           .stat:nth-child(3) { border-top: 1px solid var(--border); }
           .stat:nth-child(4) { border-top: 1px solid var(--border); }
           .parts-card { margin-bottom: 32px; }
-          .map-card { margin-bottom: 0; }
+          .map-card { margin: 28px 0; }
           .footer {
             padding: 24px 0 40px;
             flex-direction: column;
@@ -371,15 +370,16 @@ export default function Home() {
             <span className="cta-meta">약 10분 · 40문항</span>
           </div>
 
-          <div className={`map-card ${mounted ? "f5" : ""}`} onClick={() => router.push("/map")}>
-            <div className="map-card-left">
-              <p className="map-card-badge">New · 정치판세맵</p>
-              <p className="map-card-title">지역별 정치성향 분포</p>
-              <p className="map-card-desc">우리 지역은 진보? 보수? 지도로 한눈에 확인하세요.</p>
-            </div>
-            <span className="map-card-arrow">→</span>
-          </div>
         </main>
+
+        <div className={`map-card ${mounted ? "f5" : ""}`} onClick={() => router.push("/map")}>
+          <div className="map-card-left">
+            <p className="map-card-badge">New · 정치판세맵</p>
+            <p className="map-card-title">지역별 정치성향 분포</p>
+            <p className="map-card-desc">우리 지역은 진보? 보수? 지도로 한눈에 확인하세요.</p>
+          </div>
+          <span className="map-card-arrow">→</span>
+        </div>
 
         <div className={mounted ? "f5" : ""}>
           <div className="stats">
