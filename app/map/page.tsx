@@ -370,11 +370,11 @@ export default function MapPage() {
         .layout { display: flex; flex-direction: column; gap: 28px; align-items: stretch; }
 
         .map-section { width: 100%; }
-        .map-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0; gap: 12px; }
+        .map-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 2px; gap: 12px; }
         .map-title { font-family: 'Playfair Display', serif; font-size: 17px; font-weight: 700; color: var(--blue); }
         .map-count { font-size: 13px; color: var(--ink-muted); }
         .map-count strong { font-size: 15px; font-weight: 700; color: var(--blue); }
-        .map-svg { width: 100%; max-width: 420px; margin: -18px auto -4px; display: block; }
+        .map-svg { width: 100%; max-width: 420px; margin: -6px auto -4px; display: block; }
         .rp { cursor: pointer; transition: opacity 0.12s; }
         .rp:hover { opacity: 0.75; }
         .legend { display: flex; align-items: center; gap: 10px; margin-top: 2px; }
@@ -440,7 +440,7 @@ export default function MapPage() {
               </span>
             </div>
 
-            <svg viewBox="0 88 400 405" className="map-svg">
+            <svg viewBox="0 80 400 420" className="map-svg">
               {DRAW_ORDER.map(id => (
                 <path
                   key={id}
