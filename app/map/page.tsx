@@ -4,72 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 
-type SK = "far_left" | "left" | "center" | "right" | "far_right";
-interface RD {
-  name: string;
-  label: string;
-  participants: number;
-  dominant: string;
-  lean: number;
-  scores: Record<SK, number>;
-}
-
-const REGIONS: Record<string, { name: string; label: string }> = {
-  gyeonggi:  { name: "경기도",        label: "경기" },
-  seoul:     { name: "서울특별시",     label: "서울" },
-  incheon:   { name: "인천광역시",     label: "인천" },
-  gangwon:   { name: "강원도",        label: "강원" },
-  chungbuk:  { name: "충청북도",      label: "충북" },
-  chungnam:  { name: "충청남도",      label: "충남" },
-  daejeon:   { name: "대전광역시",     label: "대전" },
-  sejong:    { name: "세종특별자치시", label: "세종" },
-  jeonbuk:   { name: "전북특별자치도", label: "전북" },
-  jeonnam:   { name: "전라남도",      label: "전남" },
-  gwangju:   { name: "광주광역시",     label: "광주" },
-  gyeongbuk: { name: "경상북도",      label: "경북" },
-  gyeongnam: { name: "경상남도",      label: "경남" },
-  daegu:     { name: "대구광역시",     label: "대구" },
-  ulsan:     { name: "울산광역시",     label: "울산" },
-  busan:     { name: "부산광역시",     label: "부산" },
-  jeju:      { name: "제주특별자치도", label: "제주" },
-};
-
-const LABEL_TO_ID: Record<string, string> = Object.fromEntries(
-  Object.entries(REGIONS).map(([id, r]) => [r.label, id])
-);
-
-const RESULT_TO_SK: Record<string, SK> = {
-  "극좌": "far_left",
-  "진보": "left",
-  "중도": "center",
-  "보수": "right",
-  "극우": "far_right",
-};
-
-const EMPTY_SCORES: Record<SK, number> = {
-  far_left: 0, left: 0, center: 0, right: 0, far_right: 0,
-};
-
-const SEED: Record<string, Omit<RD, "name" | "label">> = {
-  gyeonggi:  { participants: 31842, dominant: "중도",      lean:   3, scores: { far_left:  7, left: 24, center: 40, right: 22, far_right:  7 } },
-  seoul:     { participants: 18732, dominant: "중도",      lean:   0, scores: { far_left:  9, left: 24, center: 39, right: 20, far_right:  8 } },
-  incheon:   { participants:  7245, dominant: "중도",      lean:  -5, scores: { far_left:  8, left: 27, center: 38, right: 21, far_right:  6 } },
-  gangwon:   { participants:  5621, dominant: "중도 보수",  lean:  18, scores: { far_left:  5, left: 18, center: 37, right: 28, far_right: 12 } },
-  chungbuk:  { participants:  5234, dominant: "중도",      lean:  12, scores: { far_left:  6, left: 19, center: 38, right: 27, far_right: 10 } },
-  chungnam:  { participants:  6103, dominant: "중도",      lean:   8, scores: { far_left:  6, left: 21, center: 39, right: 25, far_right:  9 } },
-  daejeon:   { participants:  5238, dominant: "중도",      lean:  -3, scores: { far_left:  8, left: 26, center: 39, right: 21, far_right:  6 } },
-  sejong:    { participants:  1824, dominant: "중도",      lean:  -8, scores: { far_left:  9, left: 28, center: 37, right: 20, far_right:  6 } },
-  jeonbuk:   { participants:  5948, dominant: "진보",      lean: -32, scores: { far_left: 14, left: 32, center: 30, right: 17, far_right:  7 } },
-  jeonnam:   { participants:  4827, dominant: "진보",      lean: -42, scores: { far_left: 17, left: 35, center: 27, right: 15, far_right:  6 } },
-  gwangju:   { participants:  4213, dominant: "진보",      lean: -48, scores: { far_left: 20, left: 36, center: 25, right: 14, far_right:  5 } },
-  gyeongbuk: { participants:  7934, dominant: "보수",      lean:  42, scores: { far_left:  4, left: 13, center: 27, right: 36, far_right: 20 } },
-  gyeongnam: { participants:  9128, dominant: "보수",      lean:  32, scores: { far_left:  5, left: 16, center: 30, right: 33, far_right: 16 } },
-  daegu:     { participants:  6742, dominant: "보수",      lean:  45, scores: { far_left:  3, left: 11, center: 25, right: 37, far_right: 24 } },
-  ulsan:     { participants:  3891, dominant: "보수",      lean:  28, scores: { far_left:  5, left: 17, center: 31, right: 32, far_right: 15 } },
-  busan:     { participants:  8924, dominant: "중도 보수",  lean:  22, scores: { far_left:  5, left: 19, center: 33, right: 30, far_right: 13 } },
-  jeju:      { participants:  2198, dominant: "중도",      lean: -12, scores: { far_left:  9, left: 26, center: 37, right: 21, far_right:  7 } },
-};
-
+import { aggregateRows, emptyRegionData, type RD, type SK } from "@/lib/map-stats";
 
 const PATHS: Record<string, { d: string; lx: number; ly: number; fs?: number }> = {
   gyeonggi: {
@@ -147,134 +82,10 @@ const DRAW_ORDER = [
   "seoul", "incheon", "daejeon", "sejong", "gwangju", "daegu", "ulsan", "busan",
 ];
 
-function seedData(): Record<string, RD> {
-  return Object.fromEntries(
-    Object.entries(REGIONS).map(([id, r]) => [
-      id,
-      {
-        name: r.name,
-        label: r.label,
-        ...(SEED[id] ?? {
-          participants: 0,
-          dominant: "데이터 없음",
-          lean: 0,
-          scores: { ...EMPTY_SCORES },
-        }),
-      },
-    ])
-  );
-}
-
-function dominantFrom(scores: Record<SK, number>): string {
-  const prog = scores.far_left + scores.left;
-  const cons = scores.right + scores.far_right;
-  const cen = scores.center;
-  if (cen >= prog && cen >= cons) {
-    if (cons >= prog + 8) return "중도 보수";
-    if (prog >= cons + 8) return "중도 진보";
-    return "중도";
-  }
-  if (prog > cons) return scores.far_left >= scores.left ? "극좌" : "진보";
-  return scores.far_right >= scores.right ? "극우" : "보수";
-}
-
-function leanFrom(scores: Record<SK, number>): number {
-  return (
-    scores.far_left * -50 +
-    scores.left * -25 +
-    scores.center * 0 +
-    scores.right * 25 +
-    scores.far_right * 50
-  ) / 100;
-}
-
-function buildFromCounts(counts: Record<string, Record<SK, number>>): Record<string, RD> {
-  const liveTotal = Object.values(counts).reduce(
-    (sum, c) => sum + c.far_left + c.left + c.center + c.right + c.far_right,
-    0
-  );
-  // anon 읽기가 막혀 있으면 기존 시드로 폴백
-  if (liveTotal === 0) return seedData();
-
-  const out: Record<string, RD> = {};
-  for (const id of Object.keys(REGIONS)) {
-    const c = counts[id] ?? { ...EMPTY_SCORES };
-    const total = c.far_left + c.left + c.center + c.right + c.far_right;
-    if (total === 0) {
-      out[id] = {
-        name: REGIONS[id].name,
-        label: REGIONS[id].label,
-        participants: 0,
-        dominant: "데이터 없음",
-        lean: 0,
-        scores: { ...EMPTY_SCORES },
-      };
-      continue;
-    }
-    const scores: Record<SK, number> = {
-      far_left: Math.round((c.far_left / total) * 100),
-      left: Math.round((c.left / total) * 100),
-      center: Math.round((c.center / total) * 100),
-      right: Math.round((c.right / total) * 100),
-      far_right: Math.round((c.far_right / total) * 100),
-    };
-    const drift = 100 - (scores.far_left + scores.left + scores.center + scores.right + scores.far_right);
-    if (drift !== 0) {
-      const key = (Object.keys(scores) as SK[]).sort((a, b) => scores[b] - scores[a])[0];
-      scores[key] += drift;
-    }
-    out[id] = {
-      name: REGIONS[id].name,
-      label: REGIONS[id].label,
-      participants: total,
-      dominant: dominantFrom(scores),
-      lean: leanFrom(scores),
-      scores,
-    };
-  }
-  return out;
-}
-
-function aggregateRows(rows: { region: string | null; result: string | null; cnt?: number | null }[]): Record<string, RD> {
-  const counts: Record<string, Record<SK, number>> = {};
-  for (const id of Object.keys(REGIONS)) {
-    counts[id] = { far_left: 0, left: 0, center: 0, right: 0, far_right: 0 };
-  }
-
-  for (const row of rows) {
-    if (!row.region || !row.result) continue;
-    const id = LABEL_TO_ID[row.region];
-    const sk = RESULT_TO_SK[row.result];
-    if (!id || !sk) continue;
-    counts[id][sk] += row.cnt ?? 1;
-  }
-
-  return buildFromCounts(counts);
-}
-
 async function fetchMapStats(): Promise<Record<string, RD>> {
-  // 1) Prefer server-side aggregate RPC (works even with tight RLS if SECURITY DEFINER)
-  const rpc = await supabase.rpc("map_region_stats");
-  if (!rpc.error && rpc.data) {
-    return aggregateRows(rpc.data as { region: string | null; result: string | null; cnt: number }[]);
-  }
-
-  // 2) Fallback: direct select (needs SELECT policy)
-  const pageSize = 1000;
-  let from = 0;
-  const all: { region: string | null; result: string | null }[] = [];
-  while (true) {
-    const { data, error } = await supabase
-      .from("responses")
-      .select("region, result")
-      .range(from, from + pageSize - 1);
-    if (error) throw error;
-    if (!data?.length) break;
-    all.push(...data);
-    if (data.length < pageSize) break;
-    from += pageSize;
-  }
-  return aggregateRows(all);
+  const { data, error } = await supabase.rpc("map_region_stats");
+  if (error) throw new Error("통계를 불러오지 못했습니다.");
+  return aggregateRows(data);
 }
 
 function fillColor(lean: number): string {
@@ -311,33 +122,36 @@ const CATS: { key: SK; label: string; color: string }[] = [
 export default function MapPage() {
   const router = useRouter();
   const [sel, setSel] = useState("seoul");
-  const [data, setData] = useState<Record<string, RD>>(seedData);
-  const [loading, setLoading] = useState(true);
-
-  const reload = async () => {
-    try {
-      setData(await fetchMapStats());
-    } catch (e) {
-      console.error("Failed to load map stats:", e);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const [data, setData] = useState<Record<string, RD>>(emptyRegionData);
+  const [status, setStatus] = useState<"loading" | "ready" | "error">("loading");
+  const [retry, setRetry] = useState(0);
 
   useEffect(() => {
-    reload();
-    const channel = supabase
-      .channel("map-responses")
-      .on(
-        "postgres_changes",
-        { event: "INSERT", schema: "public", table: "responses" },
-        () => { reload(); }
-      )
-      .subscribe();
+    let active = true;
+    let pending = false;
+    async function reload() {
+      if (pending) return;
+      pending = true;
+      try {
+        const next = await fetchMapStats();
+        if (active) { setData(next); setStatus("ready"); }
+      } catch {
+        if (active) { setData(emptyRegionData()); setStatus("error"); }
+      } finally {
+        pending = false;
+      }
+    }
+    void reload();
+    // Refresh aggregates without subscribing to individual response rows.
+    const refreshIfVisible = () => { if (!document.hidden) void reload(); };
+    const timer = window.setInterval(refreshIfVisible, 60_000);
+    document.addEventListener("visibilitychange", refreshIfVisible);
     return () => {
-      supabase.removeChannel(channel);
+      active = false;
+      window.clearInterval(timer);
+      document.removeEventListener("visibilitychange", refreshIfVisible);
     };
-  }, []);
+  }, [retry]);
 
   const total = useMemo(
     () => Object.values(data).reduce((sum, r) => sum + r.participants, 0),
@@ -431,12 +245,19 @@ export default function MapPage() {
 
         <h1 className="page-title">정치판세맵</h1>
 
+        {status === "error" && (
+          <div role="alert" style={{ textAlign: "center", padding: "16px" }}>
+            통계를 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.{" "}
+            <button type="button" onClick={() => { setStatus("loading"); setRetry(v => v + 1); }}>다시 시도</button>
+          </div>
+        )}
+        {status === "ready" && total === 0 && <p role="status" style={{ textAlign: "center" }}>아직 집계된 응답이 없습니다.</p>}
         <div className="layout">
           <section className="map-section">
             <div className="map-top">
               <span className="map-title">지역별 정치성향 분포</span>
               <span className="map-count">
-                누적 참여자 <strong>{loading ? "…" : total.toLocaleString()}</strong>명
+                누적 응답 <strong>{status === "loading" ? "…" : status === "error" ? "—" : total.toLocaleString()}</strong>건
               </span>
             </div>
 
@@ -472,22 +293,22 @@ export default function MapPage() {
             <div className="detail-card">
               <h2 className="d-name">{d.name}</h2>
               <p className="d-participants">
-                응답자 <strong>{d.participants.toLocaleString()}</strong>명 참여
+                응답 <strong>{status === "ready" ? d.participants.toLocaleString() : "—"}</strong>건
               </p>
               <div
                 className="d-badge"
                 style={{ background: badgeBg(d.lean), color: badgeColor(d.lean) }}
               >
-                {d.dominant} 우세
+                {status === "loading" ? "불러오는 중" : status === "error" ? "통계 조회 불가" : d.participants === 0 ? "응답 없음" : `${d.dominant} 우세`}
               </div>
               <div className="bars">
                 {CATS.map(cat => (
                   <div key={cat.key} className="bar-row">
                     <span className="bar-lbl">{cat.label}</span>
                     <div className="bar-bg">
-                      <div className="bar-fill" style={{ width: `${d.scores[cat.key]}%`, background: cat.color }} />
+                      <div className="bar-fill" style={{ width: `${status === "ready" && d.participants > 0 ? `${d.scores[cat.key]}%` : "—"}`, background: cat.color }} />
                     </div>
-                    <span className="bar-pct">{d.scores[cat.key]}%</span>
+                    <span className="bar-pct">{status === "ready" && d.participants > 0 ? `${d.scores[cat.key]}%` : "—"}</span>
                   </div>
                 ))}
               </div>
